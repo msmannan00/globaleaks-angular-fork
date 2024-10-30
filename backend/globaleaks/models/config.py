@@ -70,7 +70,7 @@ class ConfigFactory(object):
             Config.var_name == 'default_profile',
         ).scalar()
 
-        if default_profile is not None:
+        if default_profile is not None and default_profile != "default":
             self.parent_profile = int(default_profile)
 
     def get_all(self, filter_name):
@@ -186,7 +186,7 @@ class ConfigL10NFactory(object):
             Config.var_name == 'default_profile',
         ).scalar()
 
-        if default_profile is not None:
+        if default_profile is not None and default_profile != "default":
             default_profile_value = int(default_profile)
 
         filters.append(
