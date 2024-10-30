@@ -4,6 +4,8 @@ module.exports = function(grunt) {
       superagent = require("superagent"),
       Gettext = require("node-gettext");
 
+  require('load-grunt-tasks')(grunt);
+
   async function loadGettextParser() {
     return await import('gettext-parser');
   }
@@ -19,7 +21,7 @@ module.exports = function(grunt) {
         files: [
           {dest: "tmp/", cwd: "dist", src: ["**"], expand: true},
           {dest: "tmp/css/", cwd: "dist", src: ["fonts.css*"], expand: true, flatten: true},
-          {dest: "tmp/css/", cwd: "dist", src: ["styles-*"], expand: true, flatten: true},
+          {dest: "tmp/css/", cwd: "dist", src: ["styles.css*"], expand: true, flatten: true},
           {dest: "tmp/js/", cwd: "dist", src: ["main.js*"], expand: true, flatten: true},
           {dest: "tmp/js/", cwd: "dist", src: ["polyfills.js*"], expand: true, flatten: true},
           {dest: "tmp/js/", cwd: "dist", src: ["runtime.js*"], expand: true, flatten: true},
@@ -41,7 +43,7 @@ module.exports = function(grunt) {
           {
             dest: 'build/fonts',
             cwd: 'node_modules/',
-            src: ['@fortawesome/fontawesome-free/webfonts/*'],
+            src: ['@fortawesome/fontawesome-free/webfonts/*solid*'],
             flatten: true,
             expand: true
           },
@@ -76,152 +78,20 @@ module.exports = function(grunt) {
 
     "string-replace": {
       pass1: {
-        src: "./tmp/css/styles-*.css",
+        src: "./tmp/css/styles.css",
         dest: "./tmp/css/",
         options: {
           replacements: [
             {
-              pattern: /(0056b3|007bff|17a2b8|28a745|34ce57)/gi,
+              pattern: /url\(fa/gi,
               replacement: function () {
-                return "2866a2";
+                return "url(../fonts/fa";
               }
             },
             {
-              pattern: /40, 167, 69/gi,
+              pattern: /url\(inter/gi,
               replacement: function () {
-                return "56,119,188";
-              }
-            },
-            {
-              pattern: /0069d9/gi,
-              replacement: function () {
-                return "377abc";
-              }
-            },
-            {
-              pattern: /cce5ff/gi,
-              replacement: function () {
-                return "eef5fc";
-              }
-            },
-            {
-              pattern: /005cbf/gi,
-              replacement: function () {
-                return "79b0e6";
-              }
-            },
-            {
-              pattern: /0062cc/gi,
-              replacement: function () {
-                return "9fc9f1";
-              }
-            },
-            {
-              pattern: /6c757d/gi,
-              replacement: function () {
-                return "58606e";
-              }
-            },
-            {
-              pattern: /5a6268/gi,
-              replacement: function () {
-                return "707a8a";
-              }
-            },
-            {
-              pattern: /4e555b/gi,
-              replacement: function () {
-                return "8e99aB";
-              }
-            },
-            {
-              pattern: /(545b62)/gi,
-              replacement: function () {
-                return "afbacc";
-              }
-            },
-            {
-              pattern: /(28a745|20c997)/gi,
-              replacement: function () {
-                return "2a854e";
-              }
-            },
-            {
-              pattern: /218838/gi,
-              replacement: function () {
-                return "3ba164";
-              }
-            },
-            {
-              pattern: /1e7e34/gi,
-              replacement: function () {
-                return "57c282";
-              }
-            },
-            {
-              pattern: /dc3545/gi,
-              replacement: function () {
-                return "b80d0d";
-              }
-            },
-            {
-              pattern: /c82333/gi,
-              replacement: function () {
-                return "de1b1b";
-              }
-            },
-            {
-              pattern: /b21f2d/gi,
-              replacement: function () {
-                return "fa8e8e";
-              }
-            },
-            {
-              pattern: /0.375rem/gi,
-              replacement: function () {
-                return "0.3rem";
-              }
-            },
-            {
-              pattern: /bd2130/gi,
-              replacement: function () {
-                return "fab6b6";
-              }
-            },
-            {
-              pattern: /(e9ecef|f8f9fa)/gi,
-              replacement: function () {
-                return "f5f7fa";
-              }
-            },
-            {
-              pattern: /(212529|343a40)/gi,
-              replacement: function () {
-                return "1d1f24";
-              }
-            },
-            {
-              pattern: /(#CED4DA|#DEE2E6|rgba\(0, 0, 0, \.125\))/gi,
-              replacement: function () {
-                return "#c8d1e0";
-              }
-            },
-            {
-              pattern: /(b8daff|d6d8db|c3e6cb|f5c6cb|ffeeba)/gi,
-              replacement: function () {
-                return "c8d1e0";
-              }
-            },
-            {
-              pattern: /155724|#383d41|721c24|856404/gi,
-              replacement: function () {
-                return "1d1f24";
-              }
-            },
-            {
-              pattern: /(#e2e3e5|rgba\(0, 0, 0, \.03\)|rgba\(0, 0, 0, \.05\))/gi,
-              replacement: function () {
-                return "#f5f7fa";
+                return "url(../fonts/inter";
               }
             }
           ]
@@ -234,27 +104,9 @@ module.exports = function(grunt) {
         options: {
           replacements: [
             {
-              pattern: /'fa-solid-/gi,
-              replacement: function () {
-                return "'../fonts/fa-solid-";
-              }
-            },
-            {
-              pattern: /url\(fa-/gi,
-              replacement: function () {
-                return "url(../fonts/fa-";
-              }
-            },
-            {
               pattern: /url\(noto/gi,
               replacement: function () {
                 return "url(../fonts/noto";
-              }
-            },
-            {
-              pattern: /url\(inter/gi,
-              replacement: function () {
-                return "url(../fonts/inter";
               }
             }
           ]
@@ -293,24 +145,30 @@ module.exports = function(grunt) {
       }
     },
 
+    postcss: {
+      build_css_with_ltr_rtl_combined: {
+        options: {
+          processors: [
+            require('postcss-rtlcss')()
+          ]
+        },
+        src: 'tmp/css/styles.css',
+        dest: 'tmp/css/styles.css'
+      },
+    },
+
     shell: {
       npx_build: {
-        command: "npx ng build --configuration=production --aot --source-map"
+        command: "npx ng build --configuration=production"
       },
       npx_build_and_instrument: {
-        command: "npx ng build --configuration=testing --source-map && nyc instrument dist instrument"
+        command: "npx ng build --configuration=testing && nyc instrument dist instrument"
       },
       serve: {
         command: "ng serve --proxy-config proxy.conf.json"
       }
     },
   });
-
-  grunt.loadNpmTasks("grunt-confirm");
-  grunt.loadNpmTasks("grunt-contrib-clean");
-  grunt.loadNpmTasks("grunt-contrib-copy");
-  grunt.loadNpmTasks("grunt-shell");
-  grunt.loadNpmTasks("grunt-string-replace");
 
   let readNoTranslateStrings = function() {
     return JSON.parse(grunt.file.read("app/assets/data_src/notranslate_strings.json"));
@@ -572,7 +430,7 @@ module.exports = function(grunt) {
     let gt = new Gettext(),
         translationStringRegexpJSON = /"en":\s?"(.+)"/gi;
 
-    gt.setTextDomain("main");
+    gt.setTextDomain("stable");
 
     function addString(str) {
       if (notranslate_strings.indexOf(str) !== -1) {
@@ -656,18 +514,18 @@ module.exports = function(grunt) {
       let gt = new Gettext(),
           lang_code;
 
-      gt.setTextDomain("main");
+      gt.setTextDomain("stable");
 
       fetchTxTranslations(function(supported_languages) {
         // Parse and load the PO file
-        gt.addTranslations("en", "main", gettextParser.po.parse(fs.readFileSync("app/assets/data_src/pot/en.po")));
+        gt.addTranslations("en", "stable", gettextParser.po.parse(fs.readFileSync("app/assets/data_src/pot/en.po")));
         let strings = Object.keys(gettextParser.po.parse(fs.readFileSync("app/assets/data_src/pot/en.po"))["translations"][""]);
 
         // Process each supported language
         for (lang_code in supported_languages) {
           let translations = {}, output;
 
-          gt.addTranslations(lang_code, "main", gettextParser.po.parse(fs.readFileSync("app/assets/data_src/pot/" + lang_code + ".po")));
+          gt.addTranslations(lang_code, "stable", gettextParser.po.parse(fs.readFileSync("app/assets/data_src/pot/" + lang_code + ".po")));
           gt.setLocale(lang_code);
 
           for (let i = 0; i < strings.length; i++) {
@@ -699,7 +557,7 @@ module.exports = function(grunt) {
       let gt = new Gettext(),
           supported_languages = [];
 
-      gt.setTextDomain("main");
+      gt.setTextDomain("stable");
 
       grunt.file.recurse("app/assets/data_src/pot/", function(absdir, rootdir, subdir, filename) {
         supported_languages.push(filename.replace(/.po$/, ""));
@@ -769,7 +627,7 @@ module.exports = function(grunt) {
         }
       };
 
-      gt.addTranslations("en", "main", gettextParser.po.parse(fs.readFileSync("app/assets/data_src/pot/en.po")));
+      gt.addTranslations("en", "stable", gettextParser.po.parse(fs.readFileSync("app/assets/data_src/pot/en.po")));
 
       grunt.file.recurse("app/assets/data_src/txt", function(absdir, rootdir, subdir, filename) {
         let template_name = filename.split(".txt")[0],
@@ -780,7 +638,7 @@ module.exports = function(grunt) {
 
       supported_languages.forEach(function(lang_code) {
         gt.setLocale(lang_code);
-        gt.addTranslations(lang_code, "main", gettextParser.po.parse(fs.readFileSync("app/assets/data_src/pot/" + lang_code + ".po")));
+        gt.addTranslations(lang_code, "stable", gettextParser.po.parse(fs.readFileSync("app/assets/data_src/pot/" + lang_code + ".po")));
 
         for (let template_name in templates_sources) {
           if (!(template_name in templates)) {
@@ -922,8 +780,8 @@ module.exports = function(grunt) {
   // Run this task to fetch translations from transifex and create application files
   grunt.registerTask("updateTranslations", ["fetchTranslations", "makeAppData", "verifyAppData"]);
 
-  grunt.registerTask("build", ["clean", "shell:npx_build", "copy:build", "string-replace", "copy:package", "clean:tmp"]);
+  grunt.registerTask("build", ["clean", "shell:npx_build", "copy:build", "string-replace", "postcss", "copy:package", "clean:tmp"]);
  
-  grunt.registerTask("build_and_instrument", ["clean", "shell:npx_build_and_instrument", "copy:build", "string-replace", "copy:package", "clean:tmp"]);
+  grunt.registerTask("build_and_instrument", ["clean", "shell:npx_build_and_instrument", "copy:build", "string-replace", "postcss", "copy:package", "clean:tmp"]);
 };
 
