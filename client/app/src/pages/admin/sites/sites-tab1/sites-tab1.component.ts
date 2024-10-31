@@ -21,34 +21,25 @@ export class SitesTab1Component implements OnInit {
   private httpService = inject(HttpService);
 
   search: string;
-  newTenant: { name: string, active: boolean, mode: string,is_profile:boolean, default_profile: string, subdomain: string } = {
+  newTenant: { name: string, active: boolean, mode: string, subdomain: string } = {
     name: "",
     active: true,
     mode: "default",
-    default_profile: "default",
-    subdomain: "",
-    is_profile: false,
+    subdomain: ""
   };
   tenants: tenantResolverModel[];
-  profileTenants: tenantResolverModel[];
   showAddTenant: boolean = false;
   itemsPerPage: number = 10;
   currentPage: number = 1;
-  indexNumber: number = 0;
 
   ngOnInit(): void {
-    this.fetchTenants();
-  }
-
-  fetchTenants() {
     this.httpService.fetchTenant().subscribe(
-      tenants => {
-        this.tenants = tenants.filter(tenant => tenant.id < 1000001);
-        this.profileTenants = tenants.filter(tenant => tenant.id > 1000001);
+      tenant => {
+        this.tenants = tenant;
       }
     );
   }
-  
+
   toggleAddTenant() {
     this.showAddTenant = !this.showAddTenant;
   }
@@ -57,7 +48,6 @@ export class SitesTab1Component implements OnInit {
     this.httpService.addTenant(this.newTenant).subscribe(res => {
       this.tenants.push(res);
       this.newTenant.name = "";
-      this.newTenant.default_profile = "default";
     });
   }
 }
