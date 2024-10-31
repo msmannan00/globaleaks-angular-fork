@@ -2,7 +2,7 @@
   <div class="editorHeader row">
     <div class="col-md-6" (click)="toggleEditing($event)">
       <div>
-        <span class="badge bg-secondary">{{indexNumber}}</span>
+        <span class="badge bg-secondary">{{tenant.id}}</span>
         <span>{{tenant.name}}</span>
       </div>
       @if (tenant.active && (tenant.onionservice || tenant.hostname || (tenant.subdomain || nodeResolver.dataModel.rootdomain))) {

@@ -1,3 +1,6 @@
+Changes in version 5.0.20
+    Fix retrival of account recovery key when 2FA is enabled
+
 Changes in version 5.0.19
     Update codebase to use new angular 17 standalone components and control flow
     Correct accessibility of language selector
