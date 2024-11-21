@@ -959,7 +959,7 @@ class _User(Model):
     readonly = Column(Boolean, default=False, nullable=False)
     two_factor_secret = Column(UnicodeText(32), default='', nullable=False)
     reminder_date = Column(DateTime, default=datetime_null, nullable=False)
-
+    profile_id = Column(Integer, default='', nullable=False)
     # BEGIN of PGP key fields
     pgp_key_fingerprint = Column(UnicodeText, default='', nullable=False)
     pgp_key_public = Column(UnicodeText, default='', nullable=False)
@@ -973,7 +973,7 @@ class _User(Model):
                     'language', 'mail_address',
                     'name', 'public_name',
                     'language', 'change_email_address',
-                    'salt',
+                    'salt','profile_id',
                     'two_factor_secret']
 
     localized_keys = ['description']

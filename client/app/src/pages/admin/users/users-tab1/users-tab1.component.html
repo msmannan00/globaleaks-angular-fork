@@ -10,14 +10,15 @@
     <div class="row">
       <div ngForm="newUser" #newUser="ngForm" class="addUser col-md-6">
         <div class="form-group">
-          <label>{{ 'Role' | translate }}</label>
+          <label>{{ 'Profile' | translate }}</label>
           <span class="text-danger" ngbTooltip="{{'This field is mandatory' | translate}}">*</span>
           <div>
-            <select name="role" class="form-select-custom" [(ngModel)]="new_user.role" required>
-              <option value="admin">{{ 'Admin' | translate }}</option>
-              <option value="analyst">{{ 'Analyst' | translate }}</option>
-              <option value="custodian">{{ 'Custodian' | translate }}</option>
-              <option value="receiver">{{ 'Recipient' | translate }}</option>
+            <select name="role" class="form-select-custom" [(ngModel)]="new_user.profile_id" required>
+              @for (user of defaultUsers; track user) {
+                <option [value]="user.id">
+                  {{ user.name | translate }}
+                </option>
+              }
             </select>
           </div>
         </div>

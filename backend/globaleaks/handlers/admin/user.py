@@ -79,6 +79,9 @@ def db_create_user(session, tid, user_session, request, language):
     session.add(user)
 
     session.flush()
+    
+    if request['profile_id'] == "":
+        user.profile_id = user.id
 
     if user_session:
         db_log(session, tid=tid, type='create_user', user_id=user_session.user_id, object_id=user.id)

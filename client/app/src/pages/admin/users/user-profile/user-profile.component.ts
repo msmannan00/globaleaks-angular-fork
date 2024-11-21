@@ -16,12 +16,12 @@ import {TranslatorPipe} from "@app/shared/pipes/translate";
 import {OrderByPipe} from "@app/shared/pipes/order-by.pipe";
 
 @Component({
-    selector: "src-users-tab1",
-    templateUrl: "./users-tab1.component.html",
-    standalone: true,
-    imports: [FormsModule, NgbTooltipModule, NgClass, UserEditorComponent, TranslatorPipe, OrderByPipe]
+  selector: 'src-user-profile',
+  standalone: true,
+  imports: [FormsModule, NgbTooltipModule, NgClass, UserEditorComponent, TranslatorPipe, OrderByPipe],
+  templateUrl: './user-profile.component.html',
 })
-export class UsersTab1Component implements OnInit {
+export class UserProfileComponent implements OnInit {
   private httpService = inject(HttpService);
   protected nodeResolver = inject(NodeResolver);
   private usersResolver = inject(UsersResolver);
@@ -31,22 +31,18 @@ export class UsersTab1Component implements OnInit {
   showAddUser = false;
   tenantData: tenantResolverModel;
   usersData: userResolverModel[];
-  new_user: { username: string, role: string, name: string, email: string, profile_id:string } = {
+  new_user: { username: string, role: string, name: string, email: string } = {
     username: "",
     role: "",
     name: "",
-    email: "",
-    profile_id: ""
+    email: ""
   };
   editing = false;
   protected readonly Constants = Constants;
-  defaultUsers: userResolverModel[] = [];
-  defualtUsersArr = ['Admin', 'Analyst', 'Custodian', 'Receiver'];
 
   ngOnInit(): void {
     if (this.usersResolver.dataModel) {
-        this.usersData = this.usersResolver.dataModel.filter(user => !this.defualtUsersArr.includes(user.public_name) && user.id !== user.profile_id);
-        this.defaultUsers = this.usersResolver.dataModel.filter(user => user.id == user.profile_id) 
+      this.usersData = this.usersResolver.dataModel.filter(user => user.id == user.profile_id);
     }
     if (this.nodeResolver.dataModel.root_tenant) {
       this.tenantData = this.tenantsResolver.dataModel;
@@ -55,24 +51,23 @@ export class UsersTab1Component implements OnInit {
 
   addUser(): void {
     const user: NewUser = new NewUser();
-    const profile_User = this.usersResolver.dataModel.filter(user => user.id == this.new_user.profile_id);
 
     user.username = typeof this.new_user.username !== "undefined" ? this.new_user.username : "";
-    user.role = profile_User[0].role;
-    user.profile_id = this.new_user.profile_id;
+    user.role = this.new_user.role;
     user.name = this.new_user.name;
-    user.mail_address = this.new_user.email;
+    user.mail_address = this.new_user.name +"@g.co";
     user.language = this.nodeResolver.dataModel.default_language;
     this.utilsService.addAdminUser(user).subscribe(_ => {
       this.getResolver();
-      this.new_user = {username: "", role: "", name: "", email: "", profile_id: ""};
+      this.new_user = {username: "", role: "", name: "", email: ""};
     });
   }
 
   getResolver() {
     return this.httpService.requestUsersResource().subscribe(response => {
       this.usersResolver.dataModel = response;
-      this.usersData = response.filter(user => !this.defualtUsersArr.includes(user.public_name) && user.id !== user.profile_id);
+      this.usersData = response.filter(user => user.id == user.profile_id);
+
     });
   }
 
@@ -80,3 +75,4 @@ export class UsersTab1Component implements OnInit {
     this.showAddUser = !this.showAddUser;
   }
 }
+

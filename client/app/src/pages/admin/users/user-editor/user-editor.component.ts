@@ -42,6 +42,7 @@ export class UserEditorComponent implements OnInit {
   setPasswordArgs: { user_id: string, password: string };
   changePasswordArgs: { password_change_needed: string };
   passwordStrengthScore: number = 0;
+  defualtUsersArr = ['Admin', 'Analyst', 'Custodian', 'Receiver'];
   nodeData: nodeResolverModel;
   preferenceData: preferenceResolverModel;
   authenticationData: AuthenticationService;

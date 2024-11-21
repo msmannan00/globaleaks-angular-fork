@@ -87,7 +87,8 @@ def user_serialize_user(session, user, language):
         'can_edit_general_settings': user.can_edit_general_settings,
         'clicked_recovery_key': user.clicked_recovery_key,
         'accepted_privacy_policy': user.accepted_privacy_policy,
-        'contexts': contexts
+        'contexts': contexts,
+        'profile_id': user.profile_id
 
     }
 
