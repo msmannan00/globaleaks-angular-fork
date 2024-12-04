@@ -53,10 +53,6 @@ def db_wizard(session, tid, hostname, request):
        node.set_val('hostname', hostname)
 
     profiles.load_profile(session, tid, request['profile'])
-    default_admin_desc = create_default_user_desc(session, tid, 'admin', language)
-    default_receiver_desc = create_default_user_desc(session, tid, 'receiver', language)
-    create_default_user_desc(session, tid, 'analyst', language)
-    create_default_user_desc(session, tid, 'custodian', language)
     if encryption and escrow:
         crypto_escrow_prv_key, crypto_escrow_pub_key = GCE.generate_keypair()
 
@@ -70,10 +66,15 @@ def db_wizard(session, tid, hostname, request):
         admin_desc['username'] = request['admin_username']
         admin_desc['name'] = request['admin_name']
         admin_desc['mail_address'] = request['admin_mail_address']
-        admin_desc['language'] = language
+        # admin_desc['language'] = language
         admin_desc['role'] = 'admin'
         admin_desc['pgp_key_remove'] = False
-        admin_desc['profile_id'] = default_admin_desc.id
+
+        admin_profile = session.query(models.UserProfile).filter_by(role='admin', name='Admin').first()
+
+        if admin_profile:
+           admin_desc['profile_id'] = admin_profile.id
+
         admin_user = db_create_user(session, tid, None, admin_desc, language)
         db_set_user_password(session, tid, admin_user, request['admin_password'])
         admin_user.password_change_needed = (tid != 1)
@@ -87,10 +88,15 @@ def db_wizard(session, tid, hostname, request):
         receiver_desc['username'] = request['receiver_username']
         receiver_desc['name'] = request['receiver_name']
         receiver_desc['mail_address'] = request['receiver_mail_address']
-        receiver_desc['language'] = language
+        # receiver_desc['language'] = language
         receiver_desc['role'] = 'receiver'
         receiver_desc['pgp_key_remove'] = False
-        receiver_desc['profile_id'] = default_receiver_desc.id
+
+        receiver_profile = session.query(models.UserProfile).filter_by(role='receiver', name='Receiver').first()
+
+        if receiver_profile:
+           receiver_desc['profile_id'] = receiver_profile.id
+
         receiver_user = db_create_user(session, tid, None, receiver_desc, language)
         db_set_user_password(session, tid, receiver_user, request['receiver_password'])
         receiver_user.password_change_needed = (tid != 1)
@@ -138,17 +144,11 @@ def db_wizard(session, tid, hostname, request):
         session.delete(admin_user)
 
         if not request['skip_recipient_account_creation']:
-            receiver_user.can_edit_general_settings = True
-
+            receiver_profile = session.query(models.UserProfile).filter(models.UserProfile.id == receiver_user.profile_id).first()
+            receiver_profile.can_edit_general_settings = True
+            
             # Set the recipient name equal to the node name
             receiver_user.name = receiver_user.public_name = request['node_name']
-
-def create_default_user_desc(session, tid, role, language):
-    user_desc = models.User().dict(language)
-    user_desc['name'] = role.capitalize()
-    user_desc['role'] = role
-    user_desc['pgp_key_remove'] = False
-    return db_create_user(session, tid, None, user_desc, language)
 
 @transact
 def wizard(session, tid, hostname, request):

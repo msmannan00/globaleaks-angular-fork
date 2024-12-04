@@ -504,11 +504,12 @@ def serialize_receiver(session, user, language, data=None):
     """
     if data is None:
         data = db_prepare_receivers_serialization(session, [user])
+    profile = session.query(models.UserProfile).filter(models.UserProfile.id == user.profile_id).first()
 
     ret = {
         'id': user.id,
         'name': user.public_name,
-        'forcefully_selected': user.forcefully_selected,
+        'forcefully_selected': profile.forcefully_selected,
         'picture': data['imgs'].get(user.id, False)
     }
 

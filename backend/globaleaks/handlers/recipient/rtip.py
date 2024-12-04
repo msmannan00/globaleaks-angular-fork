@@ -22,7 +22,7 @@ from globaleaks.handlers.operation import OperationHandler
 from globaleaks.handlers.whistleblower.submission import db_create_receivertip, decrypt_tip
 from globaleaks.handlers.whistleblower.wbtip import db_notify_report_update
 from globaleaks.handlers.user import user_serialize_user
-from globaleaks.models import serializers
+from globaleaks.models import UserProfile, serializers
 from globaleaks.orm import db_get, db_del, db_log, transact
 from globaleaks.rest import errors, requests
 from globaleaks.state import State
@@ -40,17 +40,18 @@ def db_notify_grant_access(session, user):
     :param session: An ORM session
     :param user: A user to which send the notification
     """
+    language = session.query(models.UserProfile.language).filter(models.UserProfile.id == user.profile_id).scalar()
     data = {
         'type': 'tip_access'
     }
 
-    data['user'] = user_serialize_user(session, user, user.language)
-    data['node'] = db_admin_serialize_node(session, user.tid, user.language)
+    data['user'] = user_serialize_user(session, user, language)
+    data['node'] = db_admin_serialize_node(session, user.tid, language)
 
     if data['node']['mode'] == 'default':
-        data['notification'] = db_get_notification(session, user.tid, user.language)
+        data['notification'] = db_get_notification(session, user.tid, language)
     else:
-        data['notification'] = db_get_notification(session, 1, user.language)
+        data['notification'] = db_get_notification(session, 1, language)
 
     subject, body = Templating().get_mail_subject_and_body(data)
 
@@ -141,7 +142,22 @@ def grant_tip_access(session, tid, user_id, user_cc, itip_id, receiver_id):
     }
 
     user, rtip, itip = db_access_rtip(session, tid, user_id, itip_id)
-    if user_id == receiver_id or not user.can_grant_access_to_reports:
+
+    aaaaaa , bbbb = session.query(models.User, models.UserProfile).join(
+           models.UserProfile, models.User.profile_id == models.UserProfile.id
+       ).filter(models.User.id == user_id).first()
+    print("xxxxxxxxxxxxxxxxxx")
+    print("xxxxxxxxxxxxxxxxxx")
+    print("xxxxxxxxxxxxxxxxxx")
+    print("xxxxxxxxxxxxxxxxxx",aaaaaa)
+    print("xxxxxxxxxxxxxxxxxx",bbbb)
+    print("xxxxxxxxxxxxxxxxxx")
+    print("xxxxxxxxxxxxxxxxxx")
+    profile = session.query(models.UserProfile).filter(
+        models.UserProfile.id == user.profile_id
+    ).first()
+
+    if user_id == receiver_id or not profile.can_grant_access_to_reports:
         raise errors.ForbiddenOperation
 
     new_receiver, _ = db_grant_tip_access(session, tid, user, user_cc, itip, rtip, receiver_id)
@@ -157,7 +173,12 @@ def revoke_tip_access(session, tid, user_id, itip_id, receiver_id):
     }
 
     user, rtip, itip = db_access_rtip(session, tid, user_id, itip_id)
-    if user_id == receiver_id or not user.can_grant_access_to_reports:
+
+    profile = session.query(models.UserProfile).filter(
+        models.UserProfile.id == user.profile_id
+    ).first()
+
+    if user_id == receiver_id or not profile.can_grant_access_to_reports:
         raise errors.ForbiddenOperation
 
     if db_revoke_tip_access(session, tid, user, itip, receiver_id):
@@ -171,7 +192,8 @@ def transfer_tip_access(session, tid, user_id, user_cc, itip_id, receiver_id):
     }
 
     user, rtip, itip = db_access_rtip(session, tid, user_id, itip_id)
-    if user_id == receiver_id or not user.can_transfer_access_to_reports:
+    profile = session.query(UserProfile).filter(UserProfile.id == user.profile_id).first()
+    if user_id == receiver_id or not profile.can_transfer_access_to_reports:
         raise errors.ForbiddenOperation
 
     new_receiver, _ = db_grant_tip_access(session, tid, user, user_cc, itip, rtip, receiver_id)
@@ -236,7 +258,10 @@ def db_update_submission_status(session, tid, user_id, itip, status_id, substatu
     if itip.crypto_tip_pub_key and motivation is not None:
         motivation = base64.b64encode(GCE.asymmetric_encrypt(itip.crypto_tip_pub_key, motivation)).decode()
 
-    can_reopen_reports = session.query(models.User.can_reopen_reports).filter(models.User.id == user_id).one()[0]
+    user = session.query(models.User).filter(models.User.id == user_id).one()
+    can_reopen_reports = (session.query(models.UserProfile.can_reopen_reports).filter(models.UserProfile.id == user.profile_id).one()
+                         .can_reopen_reports)
+    
     report_reopen_request = itip.status == "closed" and status_id == "opened"
 
     if report_reopen_request and not can_reopen_reports:
@@ -711,10 +736,11 @@ def redact_report(session, user_id, report, enforce=False):
     user = session.query(models.User).get(user_id)
 
     redactions = session.query(models.Redaction).filter(models.Redaction.internaltip_id == report['id']).all()
+    profile = session.query(UserProfile).filter(UserProfile.id == user.profile_id).first()
 
     if not enforce and \
-            (user.can_mask_information or \
-             user.can_redact_information or \
+            (profile.can_mask_information or \
+             profile.can_redact_information or \
              not len(redactions)):
         return report
 
@@ -799,8 +825,9 @@ def delete_rtip(session, tid, user_id, itip_id):
     :param itip_id: An itip ID of the submission object of the operation
     """
     user, rtip, itip = db_access_rtip(session, tid, user_id, itip_id)
+    profile = session.query(models.UserProfile).filter(models.UserProfile.id == user.profile_id).first()
 
-    if not user.can_delete_submission:
+    if not profile.can_delete_submission:
         raise errors.ForbiddenOperation
 
     db_delete_itip(session, itip.id)
@@ -843,8 +870,9 @@ def postpone_expiration(session, tid, user_id, itip_id, expiration_date):
     :param expiration_date: A new expiration date
     """
     user, rtip, itip = db_access_rtip(session, tid, user_id, itip_id)
+    profile = session.query(models.UserProfile).filter(models.UserProfile.id == user.profile_id).first()
 
-    if not user.can_postpone_expiration:
+    if not profile.can_postpone_expiration:
         raise errors.ForbiddenOperation
 
     prev_expiration_date, curr_expiration_date = db_postpone_expiration(session, itip, expiration_date)
@@ -918,25 +946,32 @@ def db_create_identityaccessrequest_notifications(session, itip, rtip, iar):
     :param rtip: A rtip ID of the rtip involved in the request
     :param iar: A identity access request model
     """
-    for user in session.query(models.User).filter(models.User.role == 'custodian',
-                                                  models.User.tid == itip.tid,
-                                                  models.User.notification.is_(True)):
+    query = (session.query(models.User)
+        .join(models.UserProfile, models.User.profile_id == models.UserProfile.id)
+        .filter(
+            models.User.role == 'custodian',
+            models.User.tid == itip.tid,
+            models.UserProfile.notification.is_(True)
+        ))
+
+    for user in query:
         context = session.query(models.Context).filter(models.Context.id == itip.context_id).one()
+        language = session.query(models.UserProfile.language).filter(models.UserProfile.id == user.profile_id).scalar()
 
         data = {
             'type': 'identity_access_request'
         }
 
-        data['user'] = user_serialize_user(session, user, user.language)
-        data['tip'] = serializers.serialize_rtip(session, itip, rtip, user.language)
-        data['context'] = admin_serialize_context(session, context, user.language)
+        data['user'] = user_serialize_user(session, user, language)
+        data['tip'] = serializers.serialize_rtip(session, itip, rtip, language)
+        data['context'] = admin_serialize_context(session, context, language)
         data['iar'] = serializers.serialize_identityaccessrequest(session, iar)
-        data['node'] = db_admin_serialize_node(session, itip.tid, user.language)
+        data['node'] = db_admin_serialize_node(session, itip.tid, language)
 
         if data['node']['mode'] == 'default':
-            data['notification'] = db_get_notification(session, itip.tid, user.language)
+            data['notification'] = db_get_notification(session, itip.tid, language)
         else:
-            data['notification'] = db_get_notification(session, 1, user.language)
+            data['notification'] = db_get_notification(session, 1, language)
 
         subject, body = Templating().get_mail_subject_and_body(data)
 
@@ -971,7 +1006,13 @@ def create_identityaccessrequest(session, tid, user_id, user_cc, itip_id, reques
     session.flush()
 
     custodians = 0
-    for custodian in session.query(models.User).filter(models.User.tid == tid, models.User.role == 'custodian', models.User.enabled == True):
+    custodians = (session.query(models.User).join(models.UserProfile, models.User.profile_id == models.UserProfile.id)
+        .filter(
+            models.User.tid == tid,
+            models.User.role == 'custodian',
+            models.UserProfile.enabled.is_(True)
+        ))
+    for custodian in custodians:
         iarc = models.IdentityAccessRequestCustodian()
         iarc.identityaccessrequest_id = iar.id
         iarc.custodian_id = custodian.id
@@ -1030,8 +1071,9 @@ def create_redaction(session, tid, user_id, data):
     user, rtip, itip = db_access_rtip(session, tid, user_id, data['internaltip_id'])
 
     itip.update_date = rtip.last_access = datetime_now()
+    profile = session.query(UserProfile).filter(UserProfile.id == user.profile_id).first()
 
-    if not user.can_mask_information:
+    if not profile.can_mask_information:
         return
 
     mask_content = {}
@@ -1075,8 +1117,9 @@ def update_redaction(session, tid, user_id, redaction_id, redaction_data, tip_da
 
     if not redaction or redaction.internaltip_id != itip.id:
         return
+    profile = session.query(UserProfile).filter(UserProfile.id == user.profile_id).first()
 
-    if operation.endswith('mask') and user.can_mask_information:
+    if operation.endswith('mask') and profile.can_mask_information:
         db_update_temporary_redaction(session, tid, user_id, redaction, redaction_data)
 
         if operation == 'full-unmask':
@@ -1085,7 +1128,7 @@ def update_redaction(session, tid, user_id, redaction_id, redaction_data, tip_da
             else:
                 session.delete(redaction)
 
-    elif operation == 'redact' and user.can_redact_information:
+    elif operation == 'redact' and profile.can_redact_information:
         if content_type == "answer":
             db_redact_answers_recursively(session, tid, user_id, itip, redaction, redaction_data, tip_data)
         elif content_type == "comment":
@@ -1242,10 +1285,12 @@ class WhistleblowerFileDownload(BaseHandler):
 
         redaction = session.query(models.Redaction) \
                            .filter(models.Redaction.reference_id == ifile.id, models.Redaction.entry == '0').one_or_none()
+        
+        profile = session.query(UserProfile).filter(UserProfile.id == user.profile_id).first()
 
         if redaction is not None and \
-                not user.can_mask_information and \
-                not user.can_redact_information:
+                not profile.can_mask_information and \
+                not profile.can_redact_information:
             raise errors.ForbiddenOperation
 
         if wbfile.access_date == datetime_null():

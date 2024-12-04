@@ -1,6 +1,6 @@
 <div class="config-section">
     <div>
-      <span>{{ 'Users' | translate }}</span>
+      <span>{{ 'Profiles' | translate }}</span>
       <button class="btn btn-sm btn-primary show-add-user-btn" (click)="toggleAddUser()">
         <i class="fa-solid fa-plus"></i>
         <span>{{ 'Add' | translate }}</span>
@@ -42,7 +42,7 @@
     @for (user of usersData | orderBy:'name'; track user; let index = $index) {
       <div class="userList">
         <form id="user-{{index}}" name="editUser" #editUser="ngForm" novalidate>
-          <src-user-editor [user]="user" [editUser]="editUser" [index]="index" [users]="usersData"></src-user-editor>
+          <src-user-editor [user]="user" [editUser]="editUser" [index]="index" [is_profile]="true" [users]="usersData"></src-user-editor>
         </form>
       </div>
     }

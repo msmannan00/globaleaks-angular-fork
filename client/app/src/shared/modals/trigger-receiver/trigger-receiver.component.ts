@@ -3,7 +3,7 @@ import {NgbActiveModal, NgbModal, NgbTooltipModule} from "@ng-bootstrap/ng-boots
 import {UsersResolver} from "@app/shared/resolvers/users.resolver";
 import {UtilsService} from "@app/shared/services/utils.service";
 import {Option} from "@app/models/app/shared-public-model";
-import {userResolverModel} from "@app/models/resolvers/user-resolver-model";
+import {User, UserProfile, userResolverModel} from "@app/models/resolvers/user-resolver-model";
 import {NgSelectComponent, NgLabelTemplateDirective, NgOptionTemplateDirective} from "@ng-select/ng-select";
 import {FormsModule} from "@angular/forms";
 import {TranslateModule} from "@ngx-translate/core";
@@ -27,7 +27,7 @@ export class TriggerReceiverComponent implements OnInit {
   confirmFunction: (data: Option) => void;
 
   selected: { value: []; name: string };
-  admin_receivers_by_id: { [userId: string]: userResolverModel } = {};
+  admin_receivers_by_id: { [userId: string]: User | UserProfile } = {};
   userData: userResolverModel[] = [];
 
   ngOnInit(): void {
@@ -49,7 +49,7 @@ export class TriggerReceiverComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-  addReceiver(item: userResolverModel) {
+  addReceiver(item: User | UserProfile) {
     if (item && this.arg.trigger_receiver.indexOf(item.id) === -1) {
       this.arg.trigger_receiver.push(item.id);
     }

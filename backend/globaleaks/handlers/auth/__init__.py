@@ -9,7 +9,7 @@ from twisted.internet.defer import inlineCallbacks, returnValue
 import globaleaks.handlers.auth.token
 
 from globaleaks.handlers.base import connection_check, BaseHandler
-from globaleaks.models import InternalTip, User
+from globaleaks.models import InternalTip, User, UserProfile
 from globaleaks.orm import db_log, transact, tw
 from globaleaks.rest import errors, requests
 from globaleaks.sessions import initialize_submission_session, Sessions
@@ -112,14 +112,11 @@ def login(session, tid, username, password, authcode, client_using_tor, client_i
     :return: Returns a user session in case of success
     """
     if tid in State.tenants and State.tenants[tid].cache.simplified_login:
-        user = session.query(User).filter(or_(User.id == username,
-                                              User.username == username),
-                                          User.enabled.is_(True),
-                                          User.tid == tid).one_or_none()
+        user = (session.query(User).join(UserProfile,User.profile_id == UserProfile.id).filter(or_(User.id == username, User.username == username),
+                   UserProfile.enabled.is_(True),User.tid == tid).one_or_none())
     else:
-        user = session.query(User).filter(User.username == username,
-                                          User.enabled.is_(True),
-                                          User.tid == tid).one_or_none()
+        user = (session.query(User).join(UserProfile,User.profile_id == UserProfile.id).filter(or_(User.username == username),
+                   UserProfile.enabled.is_(True),User.tid == tid).one_or_none())
 
     if not user or not GCE.check_password(password, user.salt, user.hash):
         db_login_failure(session, tid, 0)
@@ -152,10 +149,11 @@ def login(session, tid, username, password, authcode, client_using_tor, client_i
     user.last_login = datetime_now()
 
     db_log(session, tid=tid, type='login', user_id=user.id)
+    profile = session.query(UserProfile).filter(UserProfile.id == user.profile_id).first()
 
     session = Sessions.new(tid, user.id, user.tid, user.role, crypto_prv_key, user.crypto_escrow_prv_key)
 
-    if user.role == 'receiver' and user.can_edit_general_settings:
+    if user.role == 'receiver' and profile.can_edit_general_settings:
         session.permissions['can_edit_general_settings'] = True
 
     return session

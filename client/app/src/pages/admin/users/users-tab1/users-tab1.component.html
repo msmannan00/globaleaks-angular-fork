@@ -14,7 +14,7 @@
           <span class="text-danger" ngbTooltip="{{'This field is mandatory' | translate}}">*</span>
           <div>
             <select name="role" class="form-select-custom" [(ngModel)]="new_user.profile_id" required>
-              @for (user of defaultUsers; track user) {
+              @for (user of userProfiles; track user) {
                 <option [value]="user.id">
                   {{ user.name | translate }}
                 </option>
@@ -60,11 +60,11 @@
     </div>
   }
 </div>
-@if (usersData.length > 0) {
+@if (usersData && usersData.length > 0) {
   @for (user of usersData | orderBy:'name'; track user; let index = $index) {
     <div class="userList">
       <form id="user-{{index}}" name="editUser" #editUser="ngForm" novalidate>
-        <src-user-editor [user]="user" [editUser]="editUser" [index]="index" [users]="usersData"></src-user-editor>
+        <src-user-editor (dataToParent)="receiveData()" [user]="user" [editUser]="editUser" [is_profile]="false" [userProfiles]="userProfiles" [index]="index" [users]="usersData"></src-user-editor>
       </form>
     </div>
   }

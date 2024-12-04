@@ -65,7 +65,8 @@ class PGPCheck(DailyJob):
         tenant_expiry_map = {1: []}
 
         for user in db_get_expired_or_expiring_pgp_users(session, self.state.tenants.keys()):
-            user_desc = user_serialize_user(session, user, user.language)
+            language = session.query(models.UserProfile.language).filter(models.UserProfile.id == user.profile_id).scalar()
+            user_desc = user_serialize_user(session, user, language)
             tenant_expiry_map.setdefault(user.tid, []).append(user_desc)
 
             log.info('Removing expired PGP key of: %s', user.username, tid=user.tid)

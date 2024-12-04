@@ -1,7 +1,7 @@
 import {Component, OnInit, inject} from "@angular/core";
 import {NewUser} from "@app/models/admin/new-user";
 import {tenantResolverModel} from "@app/models/resolvers/tenant-resolver-model";
-import {userResolverModel} from "@app/models/resolvers/user-resolver-model";
+import {User,UserProfile} from "@app/models/resolvers/user-resolver-model";
 import {Constants} from "@app/shared/constants/constants";
 import {NodeResolver} from "@app/shared/resolvers/node.resolver";
 import {TenantsResolver} from "@app/shared/resolvers/tenants.resolver";
@@ -30,8 +30,9 @@ export class UsersTab1Component implements OnInit {
 
   showAddUser = false;
   tenantData: tenantResolverModel;
-  usersData: userResolverModel[];
-  new_user: { username: string, role: string, name: string, email: string, profile_id:string } = {
+  usersData: User[];
+  userProfiles: UserProfile[]=[];
+  new_user: { username: string, role: string, name: string, email: string, profile_id: string } = {
     username: "",
     role: "",
     name: "",
@@ -40,14 +41,10 @@ export class UsersTab1Component implements OnInit {
   };
   editing = false;
   protected readonly Constants = Constants;
-  defaultUsers: userResolverModel[] = [];
   defualtUsersArr = ['Admin', 'Analyst', 'Custodian', 'Receiver'];
 
   ngOnInit(): void {
-    if (this.usersResolver.dataModel) {
-        this.usersData = this.usersResolver.dataModel.filter(user => !this.defualtUsersArr.includes(user.public_name) && user.id !== user.profile_id);
-        this.defaultUsers = this.usersResolver.dataModel.filter(user => user.id == user.profile_id) 
-    }
+    this.getResolver();
     if (this.nodeResolver.dataModel.root_tenant) {
       this.tenantData = this.tenantsResolver.dataModel;
     }
@@ -55,7 +52,7 @@ export class UsersTab1Component implements OnInit {
 
   addUser(): void {
     const user: NewUser = new NewUser();
-    const profile_User = this.usersResolver.dataModel.filter(user => user.id == this.new_user.profile_id);
+    const profile_User = this.userProfiles.filter(user => user.id == this.new_user.profile_id);
 
     user.username = typeof this.new_user.username !== "undefined" ? this.new_user.username : "";
     user.role = profile_User[0].role;
@@ -72,8 +69,13 @@ export class UsersTab1Component implements OnInit {
   getResolver() {
     return this.httpService.requestUsersResource().subscribe(response => {
       this.usersResolver.dataModel = response;
-      this.usersData = response.filter(user => !this.defualtUsersArr.includes(user.public_name) && user.id !== user.profile_id);
+      this.usersData = response.users.filter(user => !this.defualtUsersArr.includes(user.public_name));
+      this.userProfiles = response.user_profiles;
     });
+  }
+
+  receiveData() {
+    this.getResolver();
   }
 
   toggleAddUser(): void {
