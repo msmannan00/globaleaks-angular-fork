@@ -72,12 +72,19 @@ def db_create_user_profile(session, request):
 
 @transact
 def db_delete_user_profile(session, user_id):
+    protected_profiles = {'admin': 'Admin', 'receiver': 'Receiver', 'analyst': 'Analyst', 'custodian': 'Custodian'}
 
-    referenced_user = session.query(models.User).filter(models.User.profile_id == user_id).first()
-    if referenced_user:
-        raise errors.ForbiddenOperation
-    
     user = session.query(models.UserProfile).filter(models.UserProfile.id == user_id).first()
+
+    if not user:
+        raise ValueError
+
+    if user.role in protected_profiles and user.name == protected_profiles[user.role]:
+        raise errors.ForbiddenOperation
+
+    if session.query(models.User).filter(models.User.profile_id == user_id).first():
+        raise errors.ForbiddenOperation
+
     session.delete(user)
     session.commit()
 
