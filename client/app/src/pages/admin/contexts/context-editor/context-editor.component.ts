@@ -51,7 +51,7 @@ export class ContextEditorComponent implements OnInit {
 
     this.usersData = this.usersResolver.dataModel.users;
     this.nodeData = this.nodeResolver.dataModel;
-    this.adminReceiversById = this.utilsService.array_to_map(this.usersResolver.dataModel);
+    this.adminReceiversById = this.utilsService.array_to_map(this.usersResolver.dataModel.users);
   }
 
   toggleEditing(): void {

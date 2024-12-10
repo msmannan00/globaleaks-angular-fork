@@ -66,7 +66,6 @@ def db_wizard(session, tid, hostname, request):
         admin_desc['username'] = request['admin_username']
         admin_desc['name'] = request['admin_name']
         admin_desc['mail_address'] = request['admin_mail_address']
-        # admin_desc['language'] = language
         admin_desc['role'] = 'admin'
         admin_desc['pgp_key_remove'] = False
 
@@ -88,7 +87,6 @@ def db_wizard(session, tid, hostname, request):
         receiver_desc['username'] = request['receiver_username']
         receiver_desc['name'] = request['receiver_name']
         receiver_desc['mail_address'] = request['receiver_mail_address']
-        # receiver_desc['language'] = language
         receiver_desc['role'] = 'receiver'
         receiver_desc['pgp_key_remove'] = False
 

@@ -51,9 +51,7 @@ def user_serialize_user(session, user, language):
     contexts = [x[0] for x in session.query(models.ReceiverContext.context_id)
                                      .filter(models.ReceiverContext.receiver_id == user.id)]
     
-    profile = session.query(models.UserProfile).filter(
-        models.UserProfile.id == user.profile_id
-    ).first()
+    profile = session.query(models.UserProfile).filter(models.UserProfile.id == user.profile_id).first()
    
     ret = {
         'id': user.id,
@@ -101,7 +99,7 @@ def user_serialize_user(session, user, language):
       user.two_factor_secret == '':
         ret['require_two_factor'] = True
 
-    return get_localized_values(ret, user, user.localized_keys, language)
+    return get_localized_values(ret, user, user.localized_keys, profile.language)
 
 
 @transact

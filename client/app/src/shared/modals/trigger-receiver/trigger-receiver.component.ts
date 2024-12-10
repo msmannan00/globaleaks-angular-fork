@@ -3,7 +3,7 @@ import {NgbActiveModal, NgbModal, NgbTooltipModule} from "@ng-bootstrap/ng-boots
 import {UsersResolver} from "@app/shared/resolvers/users.resolver";
 import {UtilsService} from "@app/shared/services/utils.service";
 import {Option} from "@app/models/app/shared-public-model";
-import {User, UserProfile, userResolverModel} from "@app/models/resolvers/user-resolver-model";
+import {User, UserProfile} from "@app/models/resolvers/user-resolver-model";
 import {NgSelectComponent, NgLabelTemplateDirective, NgOptionTemplateDirective} from "@ng-select/ng-select";
 import {FormsModule} from "@angular/forms";
 import {TranslateModule} from "@ngx-translate/core";
@@ -28,16 +28,12 @@ export class TriggerReceiverComponent implements OnInit {
 
   selected: { value: []; name: string };
   admin_receivers_by_id: { [userId: string]: User | UserProfile } = {};
-  userData: userResolverModel[] = [];
+  userData: User[] = [];
 
   ngOnInit(): void {
     this.selected = {value: [], name: ""};
-    if (Array.isArray(this.users.dataModel)) {
-      this.userData = this.users.dataModel;
-    } else {
-      this.userData = [this.users.dataModel];
-    }
-    this.admin_receivers_by_id = this.utilsService.array_to_map(this.users.dataModel);
+    this.userData = this.users.dataModel.users;
+    this.admin_receivers_by_id = this.utilsService.array_to_map(this.users.dataModel.users);
   }
 
   confirm() {

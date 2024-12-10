@@ -51,16 +51,15 @@ def db_create_identity_access_reply_notifications(session, itip, iar):
     :param rtip: A rtip ID of the rtip involved in the request
     :param iar: A identity access request model
     """
-    query = (session.query(models.User, models.ReceiverTip)
+    query = (session.query(models.User, models.ReceiverTip, models.UserProfile.language)
         .join(models.UserProfile, models.User.profile_id == models.UserProfile.id)
         .filter(
             models.User.id == models.ReceiverTip.receiver_id,
             models.ReceiverTip.internaltip_id == itip.id,
             models.UserProfile.notification.is_(True)
         ))
-    for user, rtip in query:
+    for user, rtip, language in query:
         context = session.query(models.Context).filter(models.Context.id == itip.context_id).one()
-        language = session.query(models.UserProfile.language).filter(models.UserProfile.id == user.profile_id).scalar()
 
         data = {
             'type': 'identity_access_authorized' if iar.reply == 'authorized' else 'identity_access_denied'

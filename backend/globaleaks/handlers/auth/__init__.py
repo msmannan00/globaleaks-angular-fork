@@ -112,10 +112,10 @@ def login(session, tid, username, password, authcode, client_using_tor, client_i
     :return: Returns a user session in case of success
     """
     if tid in State.tenants and State.tenants[tid].cache.simplified_login:
-        user = (session.query(User).join(UserProfile,User.profile_id == UserProfile.id).filter(or_(User.id == username, User.username == username),
+        user, profile = (session.query(User,UserProfile).join(UserProfile,User.profile_id == UserProfile.id).filter(or_(User.id == username, User.username == username),
                    UserProfile.enabled.is_(True),User.tid == tid).one_or_none())
     else:
-        user = (session.query(User).join(UserProfile,User.profile_id == UserProfile.id).filter(or_(User.username == username),
+        user, profile = (session.query(User,UserProfile).join(UserProfile,User.profile_id == UserProfile.id).filter(or_(User.username == username),
                    UserProfile.enabled.is_(True),User.tid == tid).one_or_none())
 
     if not user or not GCE.check_password(password, user.salt, user.hash):
@@ -149,7 +149,6 @@ def login(session, tid, username, password, authcode, client_using_tor, client_i
     user.last_login = datetime_now()
 
     db_log(session, tid=tid, type='login', user_id=user.id)
-    profile = session.query(UserProfile).filter(UserProfile.id == user.profile_id).first()
 
     session = Sessions.new(tid, user.id, user.tid, user.role, crypto_prv_key, user.crypto_escrow_prv_key)
 
