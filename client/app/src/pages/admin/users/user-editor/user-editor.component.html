@@ -18,7 +18,7 @@
           }
         }
       </span>
-      @if (!user.enabled || defualtUsersArr.includes(user.name)) {
+      @if (!user.enabled || (defualtUsersArr.includes(user.name) && is_profile)) {
         <span class="badge bg-secondary">{{ 'Disabled' | translate }}</span>
       }
       @if (nodeData.encryption && !user.encryption && !is_profile) {
@@ -29,22 +29,22 @@
     </span>
     <span class="col-md-5 clearfix">
       <span class="float-end">
-        @if (!editing && !defualtUsersArr.includes(user.name)) {
+        @if (!editing && (!defualtUsersArr.includes(user.name) || !is_profile)) {
           <button class="btn btn-sm btn-outline-secondary" id="edit_user" (click)="toggleEditing();">
             <span>{{ 'Edit' | translate }}</span>
           </button>
         }
-        @if (editing && !defualtUsersArr.includes(user.name)) {
+        @if (editing && (!defualtUsersArr.includes(user.name) || !is_profile)) {
           <button class="btn btn-sm btn-primary" id="save_user" [disabled]="editUser.invalid" (click)="saveUser(user);toggleEditing();">
             <span>{{ 'Save' | translate }}</span>
           </button>
         }
-        @if (editing && !defualtUsersArr.includes(user.name)) {
+        @if (editing && (!defualtUsersArr.includes(user.name) || !is_profile)) {
           <button class="btn btn-sm btn-outline-secondary" (click)="toggleEditing();">
             <span>{{ 'Cancel' | translate }}</span>
           </button>
         }
-        @if (getUserID() !== user.id && !defualtUsersArr.includes(user.name)) {
+        @if (getUserID() !== user.id && (!defualtUsersArr.includes(user.name) || !is_profile)) {
           <button class="btn btn-sm btn-danger" id="delete_user" (click)="deleteUser(user)">
             <span>{{ 'Delete' | translate }}</span>
           </button>
@@ -52,7 +52,7 @@
       </span>
     </span>
   </div>
-  @if (editing && !defualtUsersArr.includes(user.name)) {
+  @if (editing && (!defualtUsersArr.includes(user.name) || !is_profile)) {
     <div class="editor">
       <hr />
       @if (!is_profile) {

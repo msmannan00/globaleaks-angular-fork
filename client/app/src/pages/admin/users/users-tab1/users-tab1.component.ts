@@ -41,7 +41,6 @@ export class UsersTab1Component implements OnInit {
   };
   editing = false;
   protected readonly Constants = Constants;
-  defualtUsersArr = ['Admin', 'Analyst', 'Custodian', 'Receiver'];
 
   ngOnInit(): void {
     this.getResolver();
@@ -69,7 +68,7 @@ export class UsersTab1Component implements OnInit {
   getResolver() {
     return this.httpService.requestUsersResource().subscribe(response => {
       this.usersResolver.dataModel = response;
-      this.usersData = response.users.filter(user => !this.defualtUsersArr.includes(user.public_name));
+      this.usersData = response.users;
       this.userProfiles = response.user_profiles;
     });
   }

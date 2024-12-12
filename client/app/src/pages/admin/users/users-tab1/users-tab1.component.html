@@ -13,7 +13,7 @@
           <label>{{ 'Profile' | translate }}</label>
           <span class="text-danger" ngbTooltip="{{'This field is mandatory' | translate}}">*</span>
           <div>
-            <select name="role" class="form-select-custom" [(ngModel)]="new_user.profile_id" required>
+            <select name="profile" class="form-select-custom" [(ngModel)]="new_user.profile_id" required>
               @for (user of userProfiles; track user) {
                 <option [value]="user.id">
                   {{ user.name | translate }}

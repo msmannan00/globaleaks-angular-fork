@@ -983,13 +983,9 @@ def create_identityaccessrequest(session, tid, user_id, user_cc, itip_id, reques
     session.flush()
 
     custodians = 0
-    custodians = (session.query(models.User).join(models.UserProfile, models.User.profile_id == models.UserProfile.id)
-        .filter(
-            models.User.tid == tid,
-            models.User.role == 'custodian',
-            models.UserProfile.enabled.is_(True)
-        ))
-    for custodian in custodians:
+    
+    for custodian in session.query(models.User).join(models.UserProfile, models.User.profile_id == models.UserProfile.id) \
+        .filter(models.User.tid == tid, models.User.role == 'custodian', models.UserProfile.enabled.is_(True)):
         iarc = models.IdentityAccessRequestCustodian()
         iarc.identityaccessrequest_id = iar.id
         iarc.custodian_id = custodian.id
@@ -1247,13 +1243,14 @@ class WhistleblowerFileDownload(BaseHandler):
 
     @transact
     def download_wbfile(self, session, tid, user_id, file_id):
-        user, ifile, wbfile, rtip = db_get(session,
-                                           (models.User,
-                                            models.InternalFile,
+        ifile, wbfile, rtip, profile = db_get(session,
+                                           (models.InternalFile,
                                             models.WhistleblowerFile,
-                                            models.ReceiverTip),
+                                            models.ReceiverTip,
+                                            models.UserProfile),
                                            (models.User.id == user_id,
                                             models.ReceiverTip.receiver_id == models.User.id,
+                                            models.UserProfile.id == models.User.profile_id,
                                             models.ReceiverTip.id == models.WhistleblowerFile.receivertip_id,
                                             models.InternalFile.id == models.WhistleblowerFile.internalfile_id,
                                             models.WhistleblowerFile.id == file_id))
@@ -1261,8 +1258,6 @@ class WhistleblowerFileDownload(BaseHandler):
         redaction = session.query(models.Redaction) \
                            .filter(models.Redaction.reference_id == ifile.id, models.Redaction.entry == '0').one_or_none()
         
-        profile = session.query(UserProfile).filter(UserProfile.id == user.profile_id).first()
-
         if redaction is not None and \
                 not profile.can_mask_information and \
                 not profile.can_redact_information:
@@ -1274,7 +1269,7 @@ class WhistleblowerFileDownload(BaseHandler):
         log.debug("Download of file %s by receiver %s" %
                   (wbfile.internalfile_id, rtip.receiver_id))
 
-        return ifile.name, ifile.id, wbfile.id, rtip.crypto_tip_prv_key, rtip.deprecated_crypto_files_prv_key, user.pgp_key_public
+        return ifile.name, ifile.id, wbfile.id, rtip.crypto_tip_prv_key, rtip.deprecated_crypto_files_prv_key, profile.pgp_key_public
 
     @inlineCallbacks
     def get(self, wbfile_id):

@@ -37,7 +37,7 @@ export class UsersComponent implements AfterViewInit {
           component: this.tab1
         },
         {
-          id:"profile",
+          id:"profiles",
           title: "Profiles",
           component: this.tab2
         },
