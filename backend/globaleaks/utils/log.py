@@ -21,9 +21,9 @@ def timedelta_to_milliseconds(t):
     return (t.microseconds + (t.seconds + t.days * 24 * 3600) * 10**6) / 10**3.0
 
 
-def log_remove_escapes(s):
+def escape_string(s):
     """
-    This function removes escape sequence from log strings
+    This function escape a sequence (e.g. for secure logging purposes)
 
     :param s: A string to be escaped
     :return:  The escaped string
@@ -35,10 +35,15 @@ def log_remove_escapes(s):
             string = str(s, 'unicode_escape')
         except UnicodeDecodeError:
             return str(s, 'string_escape')
-        except Exception as e:
-            return "Failure in log_remove_escapes %r" % e
+        except Exception:
+            return "[FAILURE IN ESCAPE STRING]"
         else:
             return string
+
+
+class LogFile(txlogfile.LogFile):
+    def write(self, data):
+        return txlogfile.LogFile.write(self, escape_string(data))
 
 
 def openLogFile(logfile, max_file_size, rotated_log_files):
@@ -53,10 +58,10 @@ def openLogFile(logfile, max_file_size, rotated_log_files):
     name = os.path.basename(logfile)
     directory = os.path.dirname(logfile)
 
-    return txlogfile.LogFile(name,
-                             directory,
-                             rotateLength=max_file_size,
-                             maxRotatedFiles=rotated_log_files)
+    return LogFile(name,
+                   directory,
+                   rotateLength=max_file_size,
+                   maxRotatedFiles=rotated_log_files)
 
 
 def logFormatter(timestamp, request):
@@ -138,7 +143,7 @@ class Logger(object):
     def print(self, prefix, msg, *args, **kwargs):
         msg = (msg % args) if args else msg
 
-        msg = log_remove_escapes(msg)
+        msg = escape_string(msg)
 
         tid = kwargs.get('tid', None)
         p = '[%s]' % prefix if tid is None else '[%s] [%d]' % (prefix, tid)

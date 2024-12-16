@@ -451,7 +451,7 @@ def get_dummy_file(content=None):
         'type': content_type,
         'submission': False,
         "reference_id": '',
-        "visibility": 0
+        "visibility": b'public'
     }
 
 
