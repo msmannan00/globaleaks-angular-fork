@@ -100,15 +100,15 @@ while getopts "ynv:h" opt; do
   esac
 done
 
-echo -e "Running the GlobaLeaks installation...\nIn case of failure please report encountered issues to the ticketing system at: https://github.com/globaleaks/GlobaLeaks/issues\n"
+echo -e "Running the GlobaLeaks installation...\nIn case of failure please report encountered issues to the ticketing system at: https://github.com/globaleaks/globaleaks-whistleblowing-software/issues\n"
 
 echo "Detected OS: $DISTRO - $DISTRO_CODENAME"
 
 last_command "check_distro"
 
-if echo "$DISTRO_CODENAME" | grep -vqE "^bookworm$" ; then
-  echo "WARNING: The GlobaLeaks software lifecycle includes full support for all Debian and Ubuntu LTS versions starting from Debian 10 and Ubuntu 20.04"
-  echo "WARNING: The currently recommended distribution is: Debian 12 (Bookworm)"
+if echo "$DISTRO_CODENAME" | grep -vqE "^(bookworm)|(noble)$" ; then
+  echo "WARNING: The recommended up-to-date platforms are Debian 12 (Bookworm) and Ubuntu 24.04 (Noble)"
+  echo "WARNING: Use one of these platforms to ensure best stability and security"
 
   prompt_for_continuation
 fi
@@ -135,7 +135,7 @@ DO "apt-get -y install gnupg net-tools software-properties-common wget"
 # Depending on the intention of the user to proceed anyhow installing on
 # a not supported distro we using the experimental package if it exists
 # or bookworm as fallback.
-if echo "$DISTRO_CODENAME" | grep -vqE "^(bionic|bookworm|bullseye|buster|focal|jammy)$"; then
+if echo "$DISTRO_CODENAME" | grep -vqE "^(bionic|bookworm|bullseye|buster|focal|jammy|noble)$"; then
   # In case of unsupported platforms we fallback on bookworm
   echo "No packages available for the current distribution; the install script will use the bookworm repository."
   DISTRO="Debian"

@@ -4,7 +4,7 @@
 # Emin Mastizada <emin@linux.com>, 2015
 # Fardin Shikhiyev <shihiyev@gmail.com>, 2015
 # fiore <salimova.gulnar@gmail.com>, 2017
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2017-2018,2020-2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2017-2018,2020-2022
 # Nikafn <appone6@gmail.com>, 2016-2018,2021
 # ruzanna <ruzanna81@gmail.com>, 2021
 # ruzanna <ruzanna81@gmail.com>, 2021
@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2017-2018,2020-2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2017-2018,2020-2022\n"
 "Language-Team: Azerbaijani (http://app.transifex.com/otf/globaleaks/language/az/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -91,20 +91,17 @@ msgstr " İnzibatçılara istifadəçi parollarını dəyişmək səlahiyyəti v
 msgid "Advanced"
 msgstr "Qabaqcıl"
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "Alıcının hesabatları silməsinə icazə verin"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "Alıcının hesabatların son tarixini dəyişməsinə icazə verin"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "İnformasiya ötürənin hesabata əlavələr etməsinə icazə verin"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "İnformasiya ötürənlərin şərh yazmasına icazə verin"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "İstifadəçilərin qeydiyyatına icazə verin"
@@ -196,8 +193,8 @@ msgstr "Davam etməzdən öncə yeni parol yaradın."
 msgid "Block the submission"
 msgstr "Göndərməni blokla"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "Təsdiqləməklə, hesabatın tarixini dəyişəcəksiz:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -269,9 +266,6 @@ msgstr "Quraşdır"
 
 msgid "Confirm"
 msgstr "Təsdiqlə"
-
-msgid "Confirmation"
-msgstr "Təsdiqləmə"
 
 msgid "Congratulations!"
 msgstr "Təbriklər!"
@@ -406,6 +400,9 @@ msgstr "Ən erkən seçmə tarixi"
 
 msgid "Edit"
 msgstr "Düzəlt"
+
+msgid "Edit the expiration date"
+msgstr "Son istifadə tarixini dəyiş"
 
 msgid "Email"
 msgstr "Emeyl"
@@ -904,9 +901,6 @@ msgstr "Xahiş edirik, bütün əlaqəli məlumatların həmişəlik silinəcəy
 
 msgid "Please select your account:"
 msgstr "Xahiş edirik, hesabınızı seçin. "
-
-msgid "Postpone the expiration date"
-msgstr "Son istifadə tarixini dəyiş"
 
 msgid "Preferences"
 msgstr "Nizamlamalar"

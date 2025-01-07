@@ -4,7 +4,7 @@
 # AO <ao@localizationlab.org>, 2015-2016
 # b33a4006134bb6ee62b30fc0fac5cec6, 2013,2016
 # Charles Peltier <charles@cl-info.fr>, 2015
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2020-2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2020-2022
 # Jean-Yves Toumit <saiolar-c@yahoo.fr>, 2013
 # kwadronaut <kwadronaut@chocovax.net>, 2015
 # marco calamari <marcoc@marcoc.it>, 2013
@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2020-2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2020-2022\n"
 "Language-Team: Malagasy (http://app.transifex.com/otf/globaleaks/language/mg/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -100,20 +100,17 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "Permettre aux destinataires de supprimer des envois"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "Autoriser les destinataires à repousser la date d’expiration des envois"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "Permettre au lanceur d’alerte d’ajouter des fichiers joints à l’envoi"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "Permettre au lanceur d’alerte de rédiger des commentaires"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "Permettre aux utilisateurs de s’inscrire"
@@ -205,8 +202,8 @@ msgstr "Avant de continuer, veuillez définir un nouveau mot de passe."
 msgid "Block the submission"
 msgstr "Bloquer l'envoi"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "En confirmant, vous repousserez la date d’expiration au :"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -278,9 +275,6 @@ msgstr "Configurer"
 
 msgid "Confirm"
 msgstr "Confirmer"
-
-msgid "Confirmation"
-msgstr ""
 
 msgid "Congratulations!"
 msgstr "Félicitations !"
@@ -415,6 +409,9 @@ msgstr "Date la plus ancienne possible"
 
 msgid "Edit"
 msgstr "Modifier"
+
+msgid "Edit the expiration date"
+msgstr "Repousser la date d’expiration"
 
 msgid "Email"
 msgstr "Courriel"
@@ -913,9 +910,6 @@ msgstr ""
 
 msgid "Please select your account:"
 msgstr "Veuillez sélectionner votre compte :"
-
-msgid "Postpone the expiration date"
-msgstr "Repousser la date d’expiration"
 
 msgid "Preferences"
 msgstr "Préférences"

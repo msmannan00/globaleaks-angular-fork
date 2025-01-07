@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Option, WhistleblowerIdentity} from "@app/models/app/shared-public-model";
 import {ParsedFields} from "@app/models/component-model/parsedFields";
-import {Answers} from "@app/models/reciever/reciever-tip-data";
+import {Answers} from "@app/models/receiver/receiver-tip-data";
 import {Step} from "@app/models/resolvers/questionnaire-model";
 import {Children} from "@app/models/whistleblower/wb-tip-data";
 import {Constants} from "@app/shared/constants/constants";
@@ -52,22 +52,6 @@ export class FieldUtilitiesService {
     }
 
     return "col-md-" + ((row_length > 12) ? 1 : (12 / row_length));
-  }
-
-  flatten_field = (id_map: any, field: any): void => {
-    if (field.children.length === 0) {
-      id_map[field.id] = field;
-      return id_map;
-    } else {
-      id_map[field.id] = field;
-      return field.children.reduce(this.flatten_field, id_map);
-    }
-  };
-
-  build_field_id_map(questionnaire: any) {
-    return questionnaire.steps.reduce((id_map: any, cur_step: any) => {
-      return cur_step.children.reduce(this.flatten_field, id_map);
-    }, {});
   }
 
   findField(answers_obj: any, field_id: any): any {
@@ -197,8 +181,10 @@ export class FieldUtilitiesService {
               }
             }
           }
-        } else if (field.type === "fileupload") {
-          entry.required_status = field.required && (!scope.uploads[field.id] || !scope.uploads[field.id].size);
+        } else if (["fileupload"].indexOf(field.type) > -1) {
+          entry.required_status = field.required && (!scope.uploads[field.id] || !scope.uploads[field.id].flowJs.files.length);
+        } else if (["voice"].indexOf(field.type) > -1) {
+          entry.required_status = field.required && (!scope.uploads[field.id] || !scope.uploads[field.id].files.length);
         } else {
           entry.required_status = field.required && !entry["value"];
         }
@@ -222,8 +208,8 @@ export class FieldUtilitiesService {
                 scope.block_submission = true;
               }
 
-              if (option.trigger_receiver.length) {
-                scope.replaceReceivers(option.trigger_receiver);
+              if (scope.submissionService && option.trigger_receiver.length) {
+                scope.submissionService.override_receivers = scope.submissionService.override_receivers.concat(option.trigger_receiver);
               }
             }
           }
@@ -242,8 +228,8 @@ export class FieldUtilitiesService {
       return;
     }
 
-    if (scope.context) {
-      scope.submissionService.setContextReceivers(scope.context.id);
+    if (scope.submissionService) {
+      scope.submissionService.override_receivers = [];
     }
 
     scope.questionnaire.steps.forEach((step: any) => {

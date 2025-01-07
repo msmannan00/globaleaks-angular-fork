@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from "@angular/core";
+import {Component, ElementRef, Input, OnInit, ViewChild, inject} from "@angular/core";
 import {NgForm} from "@angular/forms";
 import * as Flow from "@flowjs/flow.js";
 import type {FlowFile} from "@flowjs/flow.js";
@@ -10,17 +10,34 @@ import {UtilsService} from "@app/shared/services/utils.service";
 import {AppConfigService} from "@app/services/root/app-config.service";
 import {preferenceResolverModel} from "@app/models/resolvers/preference-resolver-model";
 import {AdminFile} from "@app/models/component-model/admin-file";
+import {NgClass} from "@angular/common";
+import {AdminFileComponent} from "@app/shared/partials/admin-file/admin-file.component";
+import {SwitchComponent} from "@app/shared/components/switch/switch.component";
+import {TranslatorPipe} from "@app/shared/pipes/translate";
+import {OrderByPipe} from "@app/shared/pipes/order-by.pipe";
+import {TranslateModule} from "@ngx-translate/core";
+import {NgbTooltipModule} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
-  selector: "src-tab2",
-  templateUrl: "./tab2.component.html"
+    selector: "src-tab2",
+    templateUrl: "./tab2.component.html",
+    standalone: true,
+    imports: [NgbTooltipModule, NgClass, AdminFileComponent, SwitchComponent, TranslatorPipe, OrderByPipe, TranslateModule]
 })
 export class Tab2Component implements OnInit {
+  private appConfigService = inject(AppConfigService);
+  private preferenceResolver = inject(PreferenceResolver);
+  private utilsService = inject(UtilsService);
+  private nodeResolver = inject(NodeResolver);
+  private authenticationService = inject(AuthenticationService);
+
   @Input() contentForm: NgForm;
   @ViewChild("flowAdvanced", {static: true}) flowAdvanced: FlowDirective;
-  @ViewChild("uploader") uploader: ElementRef;
+  @ViewChild("uploader") uploaderInput: ElementRef;
 
   files: FlowFile[] = [];
+  files_names: string[] = [];
+  special_files_names = ['css', 'favicon', 'logo', 'script'];
   flow: FlowDirective;
   preferenceData: preferenceResolverModel;
   authenticationData: AuthenticationService;
@@ -47,9 +64,6 @@ export class Tab2Component implements OnInit {
     }
   ];
 
-  constructor(private appConfigService: AppConfigService, private preferenceResolver: PreferenceResolver, private utilsService: UtilsService, private nodeResolver: NodeResolver, private authenticationService: AuthenticationService) {
-  }
-
   ngOnInit(): void {
     this.preferenceData = this.preferenceResolver.dataModel;
     this.authenticationData = this.authenticationService;
@@ -66,22 +80,25 @@ export class Tab2Component implements OnInit {
   onFileSelected(files: FileList | null) {
     if (files && files.length > 0) {
       const file = files[0];
-      console.log(files)
-      const flowJsInstance = new Flow({
-        target: "api/admin/files/custom",
-        speedSmoothingFactor: 0.01,
-        singleFile: true,
-        allowDuplicateUploads: true,
-        testChunks: false,
-        permanentErrors: [500, 501],
-        query: {fileSizeLimit: this.nodeResolver.dataModel.maximum_filesize * 1024 * 1024},
-        headers: {"X-Session": this.authenticationService.session.id}
-      });
+      const flowJsInstance = this.utilsService.getFlowInstance();
 
+      flowJsInstance.opts.target = "api/admin/files/custom";
+      flowJsInstance.opts.allowDuplicateUploads = true;
+      flowJsInstance.opts.singleFile = true;
+      flowJsInstance.opts.query = {fileSizeLimit: this.nodeResolver.dataModel.maximum_filesize * 1024 * 1024};
+      flowJsInstance.opts.headers = {"X-Session": this.authenticationService.session.id};
+      
       flowJsInstance.on("fileSuccess", (_) => {
         this.appConfigService.reinit(false);
         this.utilsService.reloadComponent();
       });
+
+      flowJsInstance.on("fileError", (_) => {
+        if (this.uploaderInput) {
+          this.uploaderInput.nativeElement.value = "";
+        }
+      });
+
       this.utilsService.onFlowUpload(flowJsInstance, file)
     }
   }
@@ -103,6 +120,10 @@ export class Tab2Component implements OnInit {
     this.utilsService.getFiles().subscribe(
       (updatedFiles) => {
         this.files = updatedFiles;
+	this.files_names.splice(0, this.files_names.length);
+	this.files.forEach(file => {
+          this.files_names.push(file.name);
+	});
       }
     );
   }

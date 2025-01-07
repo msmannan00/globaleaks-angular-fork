@@ -80,7 +80,6 @@ def create_comment(session, tid, user_id, content):
     itip = db_get(session,
                   models.InternalTip,
                   (models.InternalTip.id == user_id,
-                   models.InternalTip.status != 'closed',
                    models.InternalTip.tid == tid))
 
     itip.update_date = itip.last_access = datetime_now()
@@ -194,6 +193,8 @@ class WBTipInstance(BaseHandler):
     @inlineCallbacks
     def get(self):
         tip, crypto_tip_prv_key = yield get_wbtip(self.session.user_id, self.request.language)
+
+        tip = yield serializers.process_logs(tip, tip['id'])
 
         if crypto_tip_prv_key:
             tip = yield deferToThread(decrypt_tip, self.session.cc, crypto_tip_prv_key, tip)

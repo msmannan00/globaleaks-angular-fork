@@ -4,7 +4,7 @@
 # a96921fef9a72b1bcbac1fc92cca715a, 2015
 # ِAbu <elsahookie@gmail.com>, 2013
 # Ahmed Essam, 2020
-# Ahmed Essam, 2020
+# Ahmad Essam, 2020
 # Ali <alimahwer@yahoo.com>, 2023
 # amine_Acess <amine@accessnow.org>, 2013
 # amine_Acess <amine@accessnow.org>, 2013
@@ -23,7 +23,7 @@
 # Dragana Kaurin <dragana.kaurin@localizationlab.org>, 2014
 # ِAbu <elsahookie@gmail.com>, 2013
 # a96921fef9a72b1bcbac1fc92cca715a, 2015
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2014-2018,2020-2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2014-2018,2020-2022,2024
 # b665ec457f7dbc468840c2b55b7422d3_ad81431 <382f1c68613d5cfe601c75d66e8ff0dd_51600>, 2013
 # harmony, 2013
 # harmony, 2013
@@ -35,7 +35,7 @@
 # lamine Kacimi <k_lamine27@yahoo.fr>, 2015
 # mohammad ali <ilir95palira@gmail.com>, 2017
 # Muhammad Elghdban <Mohamed.Elghdban@gmail.com>, 2020
-# Muhammad Elghdban <Mohamed.Elghdban@gmail.com>, 2020,2023
+# Muhammad Elghdban <Mohamed.Elghdban@gmail.com>, 2020,2023-2024
 # Muna Hemoudi, 2021
 # Muna Hemoudi, 2021
 # nawaat <contact@nawaat.org>, 2014
@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Ali <alimahwer@yahoo.com>, 2023\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2014-2018,2020-2022,2024\n"
 "Language-Team: Arabic (http://app.transifex.com/otf/globaleaks/language/ar/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -92,7 +92,7 @@ msgid "Account recovery key"
 msgstr "مفتاح استرداد الحساب"
 
 msgid "Act on behalf of a whistleblower"
-msgstr ""
+msgstr "اعمل بالنيابة عن مخبر."
 
 msgid "Activities"
 msgstr "الأنشطة"
@@ -133,20 +133,17 @@ msgstr "المسؤولون المفوضون لتغيير كلمات مرور ا�
 msgid "Advanced"
 msgstr "متقدم"
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr "السماح للمتلقّي بتأجيل تاريخ انتهاء صلاحية الابلاغ"
+
 msgid "Allow the recipient to delete reports"
 msgstr "السماح للمتلقين بحذف البلاغات"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "السماح للمتلقّي بتأجيل تاريخ انتهاء صلاحية الابلاغ"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "السّماح للمبلغين باضافة مرفقات إلى البلاغ"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "تمكين المبلغ من كتابة تعليقات"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "السماح للمستخدمين بالاشتراك"
@@ -161,7 +158,7 @@ msgid "An update is available:"
 msgstr "هنالك تحديث متوفّر:"
 
 msgid "Analyst"
-msgstr ""
+msgstr "محلل"
 
 msgid "Anomalies"
 msgstr "الحالات الشاذّة"
@@ -194,7 +191,7 @@ msgid "Attachments"
 msgstr "مرفقات"
 
 msgid "Attention"
-msgstr ""
+msgstr "انتباه"
 
 msgid "Audio"
 msgstr "الصوت"
@@ -238,8 +235,8 @@ msgstr "قبل المتابعة، يرجى تغيير كلمة المرور ال
 msgid "Block the submission"
 msgstr "أوقف البلاغ"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "عند التأكيد، سوف يؤجل موعد انتهاء الصلاحية إلى:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr "من خلال التأكيد، ستقوم بتحرير تاريخ انتهاء الصلاحية إلى:"
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr "عند الموافقة، سيتم ضبط مُنبّهٍ على التاريخ:"
@@ -262,7 +259,7 @@ msgid "Certificate Signing Request"
 msgstr "طلب توقيع الشهادة  "
 
 msgid "Change status"
-msgstr ""
+msgstr "تغيير الحالة"
 
 msgid "Change your password"
 msgstr "تغيير كلمة المرور"
@@ -311,9 +308,6 @@ msgstr "اضبط"
 
 msgid "Confirm"
 msgstr "تأكيد "
-
-msgid "Confirmation"
-msgstr "تأكيد"
 
 msgid "Congratulations!"
 msgstr "تهانينا!"
@@ -449,6 +443,9 @@ msgstr "أقرب تاريخ للاختيار"
 msgid "Edit"
 msgstr "تحرير"
 
+msgid "Edit the expiration date"
+msgstr "تأجيل تاريخ نهاية الصلوحية"
+
 msgid "Email"
 msgstr "بريد إلكتروني"
 
@@ -564,7 +561,7 @@ msgid "Footer"
 msgstr "ذيل الصفحة "
 
 msgid "For security reasons the code needs to be changed."
-msgstr ""
+msgstr "لأغراض أمنية يجب تغيير الرمز."
 
 msgid ""
 "For security reasons, password changes are required at regular intervals."
@@ -680,7 +677,7 @@ msgid ""
 msgstr " بهذه الخطوة , الإجابات على هذه الأسئلة مفقودة أو غير صالحة:"
 
 msgid "Initially anonymous"
-msgstr ""
+msgstr "مجهول الهوية مبدئيًا"
 
 msgid "Input validation"
 msgstr "التحقق من صحة المدخلات"
@@ -781,7 +778,7 @@ msgid "Mark as important"
 msgstr "تحديد كهام."
 
 msgid "Mask"
-msgstr ""
+msgstr "إخفاء"
 
 msgid "Max"
 msgstr "اقصى"
@@ -947,9 +944,6 @@ msgstr "يرجى ملاحظة أنه سيتم حذف كل البيانات ال�
 msgid "Please select your account:"
 msgstr "الرجاء اختيار حسابك"
 
-msgid "Postpone the expiration date"
-msgstr "تأجيل تاريخ نهاية الصلوحية"
-
 msgid "Preferences"
 msgstr "التفضيلات"
 
@@ -1056,7 +1050,7 @@ msgid "Remove"
 msgstr "حذف"
 
 msgid "Reopen"
-msgstr ""
+msgstr "إعادة فتح"
 
 msgid "Reply motivation"
 msgstr "دوافع الاجابة"
@@ -1122,7 +1116,7 @@ msgid "Restrict access to specific IP addresses"
 msgstr "احصر الدخول على عناوين IP محددة"
 
 msgid "Returning whistleblowers"
-msgstr ""
+msgstr "مخبرين عائدين."
 
 msgid "Revoke access"
 msgstr "إلغاء حق الوصول"
@@ -1266,7 +1260,7 @@ msgid "Software version:"
 msgstr "نسخة البرنامج:"
 
 msgid "Statistics"
-msgstr ""
+msgstr "إحصائيات"
 
 msgid "Stats"
 msgstr "الاحصائيات"
@@ -1296,7 +1290,7 @@ msgid "Submit"
 msgstr "إرسال"
 
 msgid "Subscribed"
-msgstr ""
+msgstr "مشترك"
 
 msgid "Subscription date"
 msgstr "تاريخ الاشتراك"
@@ -1375,7 +1369,7 @@ msgid ""
 msgstr "سوف ترشدك هذه العملية التدريجية من إنشاء منصة الابلاغ الخاصة بك."
 
 msgid "The link will expire in 7 days."
-msgstr ""
+msgstr "ستنتهي صلاحية الرابط خلال 7 أيام."
 
 msgid ""
 "The manual configuration wizard will guide you through the setup of HTTPS "
@@ -1504,7 +1498,7 @@ msgid "Unhide"
 msgstr "أظهِر من جديد"
 
 msgid "Unselect"
-msgstr ""
+msgstr "ألغاء التحديد"
 
 msgid "Upload"
 msgstr "تحميل"
@@ -1618,7 +1612,7 @@ msgid ""
 msgstr "أنت تتصل بالخادم بطريقة لا تخفي هويتك. هذا الخادم يعمل فقط مع المتصلين و البلاغات المجهولة المصدر "
 
 msgid "You are operating on behalf of a whistleblower."
-msgstr ""
+msgstr "أنت تعمل بالنيابة عن مخبر."
 
 msgid ""
 "You are strongly advised to visit this site using the app called Tor "

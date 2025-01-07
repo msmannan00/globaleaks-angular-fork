@@ -3,7 +3,7 @@
 # Andrea Lusuardi <uovobw@gmail.com>, 2013
 # b33a4006134bb6ee62b30fc0fac5cec6, 2013
 # marco calamari <marcoc@marcoc.it>, 2013
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2013-2024
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2013-2024
 # b33a4006134bb6ee62b30fc0fac5cec6, 2013
 # b33a4006134bb6ee62b30fc0fac5cec6, 2013-2016
 # b33a4006134bb6ee62b30fc0fac5cec6, 2013
@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2013-2024\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2013-2024\n"
 "Language-Team: Italian (http://app.transifex.com/otf/globaleaks/language/it/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -106,20 +106,17 @@ msgstr "Amministratori autorizzati a cambiare le password degli utenti:"
 msgid "Advanced"
 msgstr "Avanzate"
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr "Permetti al ricevente di modificare la data di scadenza dei report"
+
 msgid "Allow the recipient to delete reports"
 msgstr "Permetti a questo ricevente di cancellare le segnalazioni."
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "Permetti al ricevente di posticipare la data di scadenza"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "Permetti al segnalante di aggiungere allegati alla segnalazione"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "Permetti al segnalante di scrivere commenti"
-
-msgid "Allow this user to reopen management of a report"
-msgstr "Permetti a questo utente di riaprire la gestione di una segnalazione"
 
 msgid "Allow users to sign up"
 msgstr "Permetti agli utenti di registrarsi"
@@ -211,8 +208,8 @@ msgstr "Prima di procedere, sei pregato di impostare una nuova password."
 msgid "Block the submission"
 msgstr "Blocca la segnalazione"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "Confermando postporrai la data di scadenza al:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr "Confermando modificherai la data di scadenza a:"
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr "Confermando imposterai un promemoria in data:"
@@ -283,9 +280,6 @@ msgid "Configure"
 msgstr "Configura"
 
 msgid "Confirm"
-msgstr "Conferma"
-
-msgid "Confirmation"
 msgstr "Conferma"
 
 msgid "Congratulations!"
@@ -421,6 +415,9 @@ msgstr "Prima data selezionabile"
 
 msgid "Edit"
 msgstr "Modifica"
+
+msgid "Edit the expiration date"
+msgstr "Modifica la data di scadenza"
 
 msgid "Email"
 msgstr "Email"
@@ -919,9 +916,6 @@ msgstr "Si prega di notare che tutti i dati associati saranno cancellati definit
 
 msgid "Please select your account:"
 msgstr "Come prima cosa seleziona il tuo utente:"
-
-msgid "Postpone the expiration date"
-msgstr "Posticipa la data di scadenza"
 
 msgid "Preferences"
 msgstr "Preferenze"
@@ -1720,7 +1714,7 @@ msgid "Alternative contact method"
 msgstr "Metodo di contatto alternativo"
 
 msgid "I prefer to be contacted via this platform only"
-msgstr "Preferisco essere contattato eclusivamente tramite questa piattaforma"
+msgstr "Preferisco essere contattato esclusivamente tramite questa piattaforma"
 
 msgid "Other"
 msgstr "Altro"
@@ -1756,7 +1750,7 @@ msgid "Kind regards,"
 msgstr "Distinti saluti,"
 
 msgid "Account activation"
-msgstr "Attivazione accont"
+msgstr "Attivazione account"
 
 msgid "Your whistleblowing platform is now accessible at:"
 msgstr "La tua piattaforma di whistleblowing è ora accessibile all'indirizzo:"
@@ -1853,7 +1847,7 @@ msgstr "Questa è una email di test generata dall'interfaccia di amministrazione
 msgid ""
 "Reception of this email indicates that the server was able to authenticate "
 "to and interact with the SMTP mail server."
-msgstr "La ricezione di questa email indica the il server è stato in grado di autenticarsi ed interagire con il server di posta SMTP."
+msgstr "La ricezione di questa email indica che il server è stato in grado di autenticarsi ed interagire con il server di posta SMTP."
 
 msgid "Test email"
 msgstr "Email di test"
@@ -2038,13 +2032,13 @@ msgstr "Con la presente email ti notifichiamo la ricezione di una nuova segnalaz
 msgid ""
 "This is an email to notify you that the reminder date for one or more "
 "reports has been met."
-msgstr "Questa email è per notificati che la data di promemoria di una o più segnalazioni è stata raggiunta."
+msgstr "Questa email è per notificarti che la data di promemoria di una o più segnalazioni è stata raggiunta."
 
 msgid "Reminder"
 msgstr "Promemoria"
 
 msgid "This is an email to notify that an existing report has been updated."
-msgstr "Questa email ti notifica che un una segnalazione è stata aggiornata."
+msgstr "Questa email ti notifica che una segnalazione è stata aggiornata."
 
 msgid "Report updated"
 msgstr "Segnalazione aggiornata"

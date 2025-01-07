@@ -1,12 +1,12 @@
 # 
 # Translators:
 # Cheer Zeng <cheerz6623@gmail.com>, 2021
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2021-2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2021-2022
 msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2021-2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2021-2022\n"
 "Language-Team: Malay (http://app.transifex.com/otf/globaleaks/language/ms/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -84,20 +84,17 @@ msgstr "Pentadbir memberi kebenaran untuk mengubah kata laluan:"
 msgid "Advanced"
 msgstr "Lanjutan"
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "Benarkan penerima untuk memadam laporan"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "Benarkan penerima untuk menunda tarikh tamat tempoh laporan"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "Benarkan pemberi maklumat menambah lampiran kepada laporan"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "Benarkan pemberi maklumat menulis komen"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "Benarkan pengguna untuk mendaftar"
@@ -189,8 +186,8 @@ msgstr "Sebelum meneruskan, sila tetapkan kata laluan baru."
 msgid "Block the submission"
 msgstr "Sekat penghantaran"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "Dengan mengesahkan, anda akan menunda tarikh tamat tempoh kepada:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -262,9 +259,6 @@ msgstr "Konfigurasikan"
 
 msgid "Confirm"
 msgstr "Sahkan"
-
-msgid "Confirmation"
-msgstr "Pengesahan"
 
 msgid "Congratulations!"
 msgstr "Tahniah!"
@@ -399,6 +393,9 @@ msgstr "Tarikh yang boleh dipilih paling awal"
 
 msgid "Edit"
 msgstr "Edit"
+
+msgid "Edit the expiration date"
+msgstr "Tangguh tarikh tamat tempoh"
 
 msgid "Email"
 msgstr "E-mel"
@@ -897,9 +894,6 @@ msgstr "Sila ambil perhatian bahawa semua data berkaitan akan dipadam secara kek
 
 msgid "Please select your account:"
 msgstr "Sila pilih akaun anda:"
-
-msgid "Postpone the expiration date"
-msgstr "Tangguh tarikh tamat tempoh"
 
 msgid "Preferences"
 msgstr "Keutamaan"

@@ -1,14 +1,14 @@
 # 
 # Translators:
 # Bala Subramaniyan <balapandu222@hotmail.com>, 2018-2019
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2016-2017,2020,2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2016-2017,2020,2022
 # git12a <git12@openmailbox.org>, 2015
 # Sivarajah Bagerathan <bagerathan@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2016-2017,2020,2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2016-2017,2020,2022\n"
 "Language-Team: Tamil (http://app.transifex.com/otf/globaleaks/language/ta/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -86,20 +86,17 @@ msgstr ""
 msgid "Advanced"
 msgstr "மேம்பட்டது"
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "பெற்றவர்கள் சமர்ப்பிப்புகளை நீக்க அனுமதிக்க"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "பெறுநர் சமர்ப்பிப்பு காலாவதி தேதி ஒத்தி அனுமதி"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "தகவல் தெரிவிப்பவர் சமர்ப்பிப்பு இணைப்புகளை சேர்க்க அனுமதி"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "தகவல் தெரிவிப்பவர் கருத்துக்கள் எழுத அனுமதி"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "பயனர்களை டிஜிட்டல் கையெழுத்திட செய்ய அனுமதிக்கவும்"
@@ -191,8 +188,8 @@ msgstr "தொடருவதற்கு முன், புதிய கட�
 msgid "Block the submission"
 msgstr ""
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "உறுதிப்படுத்துவதன் மூலம், நீங்கள் காலாவதி தேதி தள்ளிப்போட:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -264,9 +261,6 @@ msgstr "கட்டமைக்க"
 
 msgid "Confirm"
 msgstr "உறுதிப்படுத்தவும்"
-
-msgid "Confirmation"
-msgstr ""
 
 msgid "Congratulations!"
 msgstr "வாழ்த்துக்கள்!"
@@ -401,6 +395,9 @@ msgstr "முந்தைய தேர்ந்தெடுக்கக்க�
 
 msgid "Edit"
 msgstr "தொகு"
+
+msgid "Edit the expiration date"
+msgstr "காலாவதி தேதி ஒத்தி"
 
 msgid "Email"
 msgstr "மின்னஞ்சல்"
@@ -899,9 +896,6 @@ msgstr ""
 
 msgid "Please select your account:"
 msgstr "உங்கள் கணக்கு தேர்ந்தெடுக்கவும்:"
-
-msgid "Postpone the expiration date"
-msgstr "காலாவதி தேதி ஒத்தி"
 
 msgid "Preferences"
 msgstr "விருப்பத்தேர்வுகள்"

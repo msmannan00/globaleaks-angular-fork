@@ -13,7 +13,7 @@
 # erinm, 2021
 # erinm, 2021
 # tyfjoh, 2014
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2013-2023
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2013-2023
 # b33a4006134bb6ee62b30fc0fac5cec6, 2013
 # b33a4006134bb6ee62b30fc0fac5cec6, 2013
 # b33a4006134bb6ee62b30fc0fac5cec6, 2013
@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2013-2023\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2013-2023\n"
 "Language-Team: Dutch (http://app.transifex.com/otf/globaleaks/language/nl/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -128,20 +128,17 @@ msgstr "Beheerders die gemachtigd zijn om gebruikerswachtwoorden te wijzigen:"
 msgid "Advanced"
 msgstr "Geavanceerd"
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "Sta ontvangers toe tips te verwijderen"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "De ontvanger mag de einddatum van de inzending uitstellen"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "De klokkenluider toestaan bestanden toe te voegen aan een inzending"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "De klokkenluider toestaan reacties achter te laten"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "Gebruikers toestaan zich in te schijven"
@@ -233,8 +230,8 @@ msgstr "Voor je verdergaat, stel alsjeblieft een nieuw wachtwoord in."
 msgid "Block the submission"
 msgstr "Blokkeer de inzending"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "Door te bevestigen, verander je de vervaldatum van de tip in:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -306,9 +303,6 @@ msgstr "Configureer"
 
 msgid "Confirm"
 msgstr "Bevestig extentie"
-
-msgid "Confirmation"
-msgstr "Bevestiging"
 
 msgid "Congratulations!"
 msgstr "Gefeliciteerd!"
@@ -443,6 +437,9 @@ msgstr "Vroegst mogelijke datum"
 
 msgid "Edit"
 msgstr "Bewerken"
+
+msgid "Edit the expiration date"
+msgstr "Vervaldatum uitstellen"
 
 msgid "Email"
 msgstr "E-mail"
@@ -941,9 +938,6 @@ msgstr "Let op dat alle hiermee verbonden gegevens definitief verwijderd zullen 
 
 msgid "Please select your account:"
 msgstr "Selecteer je account:"
-
-msgid "Postpone the expiration date"
-msgstr "Vervaldatum uitstellen"
 
 msgid "Preferences"
 msgstr "Voorkeuren"

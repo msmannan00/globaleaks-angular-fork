@@ -1,25 +1,26 @@
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 import {AppDataService} from "@app/app-data.service";
 import {HttpService} from "@app/shared/services/http.service";
-import {Context} from "@app/models/reciever/reciever-tip-data";
+import {Context} from "@app/models/receiver/receiver-tip-data";
 import {submissionResourceModel} from "@app/models/whistleblower/submission-resource";
 
 @Injectable({
   providedIn: "root",
 })
 export class SubmissionService {
+  private httpService = inject(HttpService);
+  private appDataService = inject(AppDataService);
+
   submission: submissionResourceModel = new submissionResourceModel();
   context: Context;
   receivers: string[] = [];
   mandatory_receivers = 0;
   optional_receivers = 0;
   selected_receivers: { [key: string]: boolean } = {};
+  override_receivers: string[] = [];
   blocked = false;
   uploads: { [key: string]: any };
   private sharedData: Flow[] = [];
-
-  constructor(private httpService: HttpService, private appDataService: AppDataService) {
-  }
 
   setContextReceivers(context_id: number) {
     this.context = this.appDataService.contexts_by_id[context_id];
@@ -64,9 +65,13 @@ export class SubmissionService {
   submit() {
     this.submission.receivers = [];
 
-    for (const key in this.selected_receivers) {
-      if (Object.prototype.hasOwnProperty.call(this.selected_receivers, key)) {
-        this.submission.receivers.push(key);
+    if (this.override_receivers.length) {
+      this.submission.receivers = this.override_receivers;
+    } else {
+      for (const key in this.selected_receivers) {
+        if (Object.prototype.hasOwnProperty.call(this.selected_receivers, key)) {
+          this.submission.receivers.push(key);
+        }
       }
     }
 

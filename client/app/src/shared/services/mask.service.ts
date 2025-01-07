@@ -1,5 +1,5 @@
-import {ElementRef, Injectable} from '@angular/core';
-import {RecieverTipData} from '@app/models/reciever/reciever-tip-data';
+import {ElementRef, Injectable, inject} from '@angular/core';
+import {RecieverTipData} from '@app/models/receiver/receiver-tip-data';
 import {WbTipData} from '@app/models/whistleblower/wb-tip-data';
 import {RedactInformationComponent} from '@app/shared/modals/redact-information/redact-information.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -8,8 +8,8 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
   providedIn: 'root', 
 })
 export class MaskService {
+  private modalService = inject(NgbModal);
 
-  constructor(private modalService: NgbModal){}
 
   getSelectedRanges(select: boolean, selected_ranges: any[],redactTextArea:ElementRef) {
     
@@ -127,7 +127,11 @@ export class MaskService {
 
   getRedaction(id: string, entry: string,tip:RecieverTipData | WbTipData): any {
     const redactionObjects = tip.redactions.filter((redaction:any) => {
-      return redaction.reference_id === id && redaction.entry === entry;
+      if(!entry){
+        return redaction.reference_id === id && redaction.entry === "0";
+      } else {
+        return redaction.reference_id === id && redaction.entry === entry;
+      }
     });
 
     return redactionObjects.length > 0 ? redactionObjects[0] : null;

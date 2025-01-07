@@ -1,7 +1,7 @@
-import {EventEmitter, Injectable, Renderer2} from "@angular/core";
+import {EventEmitter, Injectable, Renderer2, inject} from "@angular/core";
 import * as Flow from "@flowjs/flow.js";
 import {TranslateService} from "@ngx-translate/core";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {RequestSupportComponent} from "@app/shared/modals/request-support/request-support.component";
 import {HttpService} from "@app/shared/services/http.service";
@@ -27,23 +27,37 @@ import {Option} from "@app/models/whistleblower/wb-tip-data";
 import {Status} from "@app/models/app/public-model";
 import {AppDataService} from "@app/app-data.service";
 import {AuthenticationService} from "@app/services/helper/authentication.service";
-import { FlowFile } from "@flowjs/flow.js";
-import { AcceptAgreementComponent } from "../modals/accept-agreement/accept-agreement.component";
+import {FlowFile, FlowOptions} from "@flowjs/flow.js";
+import {AcceptAgreementComponent} from "@app/shared/modals/accept-agreement/accept-agreement.component";
+import {WbFile} from "@app/models/app/shared-public-model";
+import {FileViewComponent} from "@app/shared/modals/file-view/file-view.component";
+import {CryptoService} from "@app/shared/services/crypto.service";
 @Injectable({
   providedIn: "root"
 })
 export class UtilsService {
+  private authenticationService = inject(AuthenticationService);
+  private activatedRoute = inject(ActivatedRoute);
+  protected appDataService = inject(AppDataService);
+  private cryptoService = inject(CryptoService);
+  private tokenResource = inject(TokenResource);
+  private translateService = inject(TranslateService);
+  private clipboardService = inject(ClipboardService);
+  private http = inject(HttpClient);
+  private httpService = inject(HttpService);
+  private modalService = inject(NgbModal);
+  private preferenceResolver = inject(PreferenceResolver);
+  private router = inject(Router);
 
-  constructor(private tokenResource: TokenResource,private translateService: TranslateService, private clipboardService: ClipboardService, private http: HttpClient, private httpService: HttpService, private modalService: NgbModal, private preferenceResolver: PreferenceResolver, private router: Router) {
-  }
+  supportedViewTypes = ["application/pdf", "audio/mpeg", "image/gif", "image/jpeg", "image/png", "text/csv", "text/plain", "video/mp4"];
 
   updateNode(nodeResolverModel:nodeResolverModel) {
     this.httpService.updateNodeResource(nodeResolverModel).subscribe();
   }
 
-  routeGuardRedirect(){
-    const loginUrlWithParam = `/login?redirect=${encodeURIComponent(location.hash.substring(1))}`;
-    this.router.navigateByUrl(loginUrlWithParam).then();
+  routeGuardRedirect(route="login", skipChange = false){
+    const loginUrlWithParam = `/${route}?redirect=${encodeURIComponent(location.hash.substring(1))}`;
+    this.router.navigateByUrl(loginUrlWithParam, { skipLocationChange: skipChange }).then(() => {});
   }
 
   newItemOrder(objects: any[], key: string): number {
@@ -94,7 +108,7 @@ export class UtilsService {
     return false;
   }
 
-  removeBootstrap(renderer: Renderer2, document:Document, link:string){
+  removeStyles(renderer: Renderer2, document:Document, link:string){
     const defaultBootstrapLink = document.head.querySelector(`link[href="${link}"]`);
     if (defaultBootstrapLink) {
       renderer.removeChild(document.head, defaultBootstrapLink);
@@ -227,7 +241,7 @@ export class UtilsService {
   }
 
   showWBLoginBox() {
-    return this.router.url === "/submission";
+    return this.router.url.startsWith("/submission");
   }
 
   showUserStatusBox(authenticationService: AuthenticationService, appDataService: AppDataService) {
@@ -269,6 +283,7 @@ export class UtilsService {
       this.modalService.open(RequestSupportComponent,{backdrop: "static",keyboard: false});
     }
   }
+
   array_to_map(receivers: any) {
     const ret: any = {};
 
@@ -287,13 +302,12 @@ export class UtilsService {
     let text;
     for (let i = 0; i < submission_statuses.length; i++) {
       if (submission_statuses[i].id === status) {
-        text = submission_statuses[i].label;
-
+        text = submission_statuses[i].label ? this.translateService.instant(submission_statuses[i].label) : '';
 
         const subStatus = submission_statuses[i].substatuses;
         for (let j = 0; j < subStatus.length; j++) {
-          if (subStatus[j].id === substatus) {
-            text += ' \u2013 ' + this.translateService.instant(subStatus[j].label);
+          if (subStatus[j].id === substatus && subStatus[j].label) {
+            text += ' \u2013 ' + subStatus[j].label;
             break;
           }
         }
@@ -303,9 +317,32 @@ export class UtilsService {
     return text?text:"";
   }
 
+  searchInObject(obj: any, searchTerm: string) {
+    try {
+        // Convert object to a string
+        const objString = JSON.stringify(obj);
+
+        // Create a regular expression for the search term with 'i' flag for case-insensitive search
+        const regex = new RegExp(searchTerm, 'i');
+
+        // Test if the search term is found in the object string
+        return regex.test(objString);
+    } catch (error) {
+        // Return false in case of any exception (e.g., cyclic reference or BigInt error)
+        return false;
+    }
+    return false;
+  }
+
+  isDatePassed(time: string) {
+    const report_date = new Date(time);
+    const current_date = new Date();
+    return current_date > report_date;
+  }
+
   isNever(time: string) {
     const date = new Date(time);
-    return date.getTime() === 32503680000000;
+    return date.getTime() >= 32503680000000;
   }
 
   deleteFromList(list:  { [key: string]: Field}[], elem: { [key: string]: Field}) {
@@ -398,19 +435,6 @@ export class UtilsService {
     window.print();
   }
 
-  saveAs(authenticationService: AuthenticationService, filename: any, url: string): void {
-
-    const headers = new HttpHeaders({
-      "X-Session": authenticationService.session.id
-    });
-
-    this.http.get(url, {responseType: "blob", headers: headers}).subscribe(
-      response => {
-        this.saveBlobAs(filename, response);
-      }
-    );
-  }
-
   saveBlobAs(filename:string,response:Blob){
     const blob = new Blob([response], {type: "text/plain;charset=utf-8"});
     const blobUrl = URL.createObjectURL(blob);
@@ -423,6 +447,18 @@ export class UtilsService {
     setTimeout(() => {
       URL.revokeObjectURL(blobUrl);
     }, 1000);
+  }
+
+  saveAs(authenticationService: AuthenticationService, filename: any, url: string): void {
+    const headers = new HttpHeaders({
+      "X-Session": authenticationService.session.id
+    });
+
+    this.http.get(url, {responseType: "blob", headers: headers}).subscribe(
+      response => {
+        this.saveBlobAs(filename, response);
+      }
+    );
   }
 
   getPostponeDate(ttl: number): Date {
@@ -509,9 +545,12 @@ export class UtilsService {
 
   getConfirmation(): Observable<string> {
     return new Observable((observer) => {
-      let modalRef = this.modalService.open(ConfirmationWithPasswordComponent,{backdrop: "static",keyboard: false});
+      let modalRef;
+
       if (this.preferenceResolver.dataModel.two_factor) {
         modalRef = this.modalService.open(ConfirmationWith2faComponent,{backdrop: "static",keyboard: false});
+      } else {
+        modalRef = this.modalService.open(ConfirmationWithPasswordComponent,{backdrop: "static",keyboard: false});
       }
 
       modalRef.componentInstance.confirmFunction = (secret: string) => {
@@ -693,5 +732,55 @@ export class UtilsService {
     link.href = window.URL.createObjectURL(blob);
     link.download = `${fileName}.csv`;
     link.click();
+  }
+
+  public viewRFile(file: WbFile) {
+    const modalRef = this.modalService.open(FileViewComponent, {backdrop: 'static', keyboard: false});
+    modalRef.componentInstance.args = {
+      file: file,
+      loaded: false,
+      iframeHeight: window.innerHeight * 0.75
+    };
+  }
+
+  public downloadRFile(file: WbFile) {
+    const param = JSON.stringify({});
+    this.httpService.requestToken(param).subscribe
+    (
+      {
+        next: async token => {
+          this.cryptoService.proofOfWork(token.id).subscribe(
+              (ans) => {
+               const url = this.authenticationService.session.role === "whistleblower"?"api/whistleblower/wbtip/wbfiles/":"api/recipient/wbfiles/";
+                window.open(url + file.id + "?token=" + token.id + ":" + ans);
+                this.appDataService.updateShowLoadingPanel(false);
+              }
+          );
+        }
+      }
+    );
+  }
+
+  public getFlowOptions(): FlowOptions {
+    return {
+      chunkSize: 1000 * 1024,
+      forceChunkSize: true,
+      simultaneousUploads: 1,
+      testChunks: false,
+      permanentErrors:[500, 501],
+      speedSmoothingFactor:0.01,
+      allowDuplicateUploads:false,
+      singleFile:false,
+      generateUniqueIdentifier:() => {
+        return crypto.randomUUID();
+      },
+      headers:() => {
+        return {"X-Session": this.authenticationService.session.id};
+      }
+    };
+  }
+
+  public getFlowInstance(): Flow {
+    return new Flow(this.getFlowOptions());
   }
 }

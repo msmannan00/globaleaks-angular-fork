@@ -7,9 +7,9 @@ import traceback
 from acme.errors import ValidationError
 
 from txtorcon.torcontrolprotocol import TorProtocolError
-
+from sqlalchemy.exc import OperationalError
 from twisted.internet.defer import succeed, AlreadyCalledError, CancelledError
-from twisted.internet.error import ConnectionLost, DNSLookupError, NoRouteError, TimeoutError
+from twisted.internet.error import ConnectionLost, ConnectionRefusedError, DNSLookupError, NoRouteError, TimeoutError
 from twisted.mail.smtp import SMTPError
 from twisted.python.failure import Failure
 from twisted.python.threadpool import ThreadPool
@@ -22,7 +22,7 @@ from globaleaks.settings import Settings
 from globaleaks.transactions import db_schedule_email
 from globaleaks.utils.agent import get_tor_agent, get_web_agent
 from globaleaks.utils.crypto import sha256, totpVerify
-from globaleaks.utils.log import log
+from globaleaks.utils.log import log, openLogFile
 from globaleaks.utils.mail import sendmail
 from globaleaks.utils.objectdict import ObjectDict
 from globaleaks.utils.pgp import PGPContext
@@ -33,15 +33,17 @@ from globaleaks.utils.tempdict import TempDict
 from globaleaks.utils.templating import Templating
 from globaleaks.utils.token import TokenList
 from globaleaks.utils.tor_exit_set import TorExitSet
-from globaleaks.utils.utility import datetime_now
+from globaleaks.utils.utility import datetime_now, datetime_null
 
 
 silenced_exceptions = (
   AlreadyCalledError,
   CancelledError,
   ConnectionLost,
+  ConnectionRefusedError,
   DNSLookupError,
   GeneratorExit,
+  OperationalError,
   NoRouteError,
   ResponseNeverReceived,
   SMTPError,
@@ -49,6 +51,27 @@ silenced_exceptions = (
   TorProtocolError,
   ValidationError
 )
+
+
+class RateLimitingStatus(object):
+    def __init__(self):
+        self.counter = 0
+
+
+class RateLimitingDict(TempDict):
+    def check(self, key, limit):
+        if key not in self:
+            self[key] = RateLimitingStatus()
+
+        status = self[key]
+
+        if status.counter >= limit:
+            raise errors.ForbiddenOperation()
+
+        status.counter += 1
+
+
+RateLimitingTable = RateLimitingDict(3600)
 
 
 class TenantState(object):
@@ -71,6 +94,7 @@ class TenantState(object):
 
 class StateClass(ObjectDict, metaclass=Singleton):
     def __init__(self):
+        self.reset_cache = False
         self.start_time = datetime_now()
         self.settings = Settings
 
@@ -105,6 +129,7 @@ class StateClass(ObjectDict, metaclass=Singleton):
         self.TempKeys = TempDict(3600 * 72)
         self.TwoFactorTokens = TempDict(120)
         self.TempUploadFiles = TempDict(3600)
+        self.RateLimitingTable = RateLimitingDict(3600)
 
         self.shutdown = False
 
@@ -112,6 +137,7 @@ class StateClass(ObjectDict, metaclass=Singleton):
         os.umask(0o77)
         self.settings.eval_paths()
         self.create_directories()
+        self.csp_report_log = openLogFile(Settings.csp_report_file, Settings.log_file_size, Settings.num_log_files)
 
     def set_orm_tp(self, orm_tp):
         self.orm_tp = orm_tp
@@ -196,12 +222,13 @@ class StateClass(ObjectDict, metaclass=Singleton):
         if tenant_cache.onionservice:
             print("- [Tor]:  http://%s" % tenant_cache.onionservice)
 
+    def reset_minutely(self):
+        self.exceptions.clear()
+        self.exceptions_email_count = 0
+
     def reset_hourly(self):
         for tid in self.tenants:
             self.tenants[tid].reset_events()
-
-        self.exceptions.clear()
-        self.exceptions_email_count = 0
 
         self.stats_collection_start_time = datetime_now()
 
@@ -251,7 +278,7 @@ class StateClass(ObjectDict, metaclass=Singleton):
             log.err("Error: Cannot send mail exception before complete initialization.")
             return
 
-        if self.exceptions_email_count >= self.settings.exceptions_email_hourly_limit:
+        if self.exceptions_email_count >= self.settings.exceptions_email_minutely_limit:
             return
 
         exception_text = (exception_text % args) if args else exception_text

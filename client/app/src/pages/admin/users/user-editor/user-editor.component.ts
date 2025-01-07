@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
-import {NgForm} from "@angular/forms";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject} from "@angular/core";
+import {NgForm, FormsModule} from "@angular/forms";
+import {NgbModal, NgbTooltipModule} from "@ng-bootstrap/ng-bootstrap";
 import {AppDataService} from "@app/app-data.service";
 import {AuthenticationService} from "@app/services/helper/authentication.service";
 import {Constants} from "@app/shared/constants/constants";
@@ -12,18 +12,32 @@ import {Observable} from "rxjs";
 import {userResolverModel} from "@app/models/resolvers/user-resolver-model";
 import {nodeResolverModel} from "@app/models/resolvers/node-resolver-model";
 import {preferenceResolverModel} from "@app/models/resolvers/preference-resolver-model";
+import {NgClass, DatePipe} from "@angular/common";
+import {ImageUploadDirective} from "@app/shared/directive/image-upload.directive";
+import {PasswordStrengthValidatorDirective} from "@app/shared/directive/password-strength-validator.directive";
+import {PasswordMeterComponent} from "@app/shared/components/password-meter/password-meter.component";
+import {TranslatorPipe} from "@app/shared/pipes/translate";
 
 @Component({
-  selector: "src-user-editor",
-  templateUrl: "./user-editor.component.html"
+    selector: "src-user-editor",
+    templateUrl: "./user-editor.component.html",
+    standalone: true,
+    imports: [ImageUploadDirective, FormsModule, PasswordStrengthValidatorDirective, NgbTooltipModule, NgClass, PasswordMeterComponent, DatePipe, TranslatorPipe]
 })
 export class UserEditorComponent implements OnInit {
+  private modalService = inject(NgbModal);
+  private appDataService = inject(AppDataService);
+  private preference = inject(PreferenceResolver);
+  private authenticationService = inject(AuthenticationService);
+  private nodeResolver = inject(NodeResolver);
+  private utilsService = inject(UtilsService);
+
   @Input() user: userResolverModel;
   @Input() users: userResolverModel[];
   @Input() index: number;
   @Input() editUser: NgForm;
   @Output() dataToParent = new EventEmitter<string>();
-
+  @ViewChild("uploader") uploaderInput: ElementRef;
   editing = false;
   setPasswordArgs: { user_id: string, password: string };
   changePasswordArgs: { password_change_needed: string };
@@ -33,9 +47,6 @@ export class UserEditorComponent implements OnInit {
   authenticationData: AuthenticationService;
   appServiceData: AppDataService;
   protected readonly Constants = Constants;
-
-  constructor(private modalService: NgbModal, private appDataService: AppDataService, private preference: PreferenceResolver, private authenticationService: AuthenticationService, private nodeResolver: NodeResolver, private utilsService: UtilsService) {
-  }
 
   ngOnInit(): void {
     if (this.nodeResolver.dataModel) {
@@ -85,8 +96,15 @@ export class UserEditorComponent implements OnInit {
     if (user.pgp_key_public !== "") {
       user.pgp_key_remove = false;
     }
-    return this.utilsService.updateAdminUser(userData.id, userData).subscribe(_ => {
-      this.sendDataToParent();
+    return this.utilsService.updateAdminUser(userData.id, userData).subscribe({
+      next:()=>{
+        this.sendDataToParent();
+      },
+      error:()=>{
+        if (this.uploaderInput) {
+          this.uploaderInput.nativeElement.value = "";
+        }
+      }
     });
   }
 

@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {PasswordRecoveryResponseModel} from "@app/models/authentication/password-recovery-response-model";
@@ -8,7 +8,7 @@ import {nodeResolverModel} from "@app/models/resolvers/node-resolver-model";
 import {networkResolverModel} from "@app/models/resolvers/network-resolver-model";
 import {FileResource} from "@app/models/component-model/file-resources";
 import {TlsConfig} from "@app/models/component-model/tls-confiq";
-import {Answers} from "@app/models/reciever/reciever-tip-data";
+import {Answers} from "@app/models/receiver/receiver-tip-data";
 import {NewQuestionare} from "@app/models/admin/new-questionare";
 import {Step, questionnaireResolverModel} from "@app/models/resolvers/questionnaire-model";
 import {NewUser} from "@app/models/admin/new-user";
@@ -21,7 +21,7 @@ import {Field, fieldtemplatesResolverModel} from "@app/models/resolvers/field-te
 import {contextResolverModel} from "@app/models/resolvers/context-resolver-model";
 import {Root, Status, Substatus} from "@app/models/app/public-model";
 import {notificationResolverModel} from "@app/models/resolvers/notification-resolver-model";
-import {Session} from "@app/models/authentication/session";
+import {Session, SessionRefresh} from "@app/models/authentication/session";
 import {RFile, Comment} from "@app/models/app/shared-public-model";
 import {preferenceResolverModel} from "@app/models/resolvers/preference-resolver-model";
 import {TokenResponse} from "@app/models/authentication/token-response";
@@ -31,19 +31,19 @@ import {WbTipData} from "@app/models/whistleblower/wb-tip-data";
 import {auditlogResolverModel} from "@app/models/resolvers/auditlog-resolver-model";
 import {jobResolverModel} from "@app/models/resolvers/job-resolver-model";
 import {rtipResolverModel} from "@app/models/resolvers/rtips-resolver-model";
-import {IarData} from "@app/models/reciever/Iar-data";
+import {IarData} from "@app/models/receiver/iar-data";
 import {statusResolverModel} from "@app/models/resolvers/status-resolver-model";
 import {statisticsResolverModel} from "@app/models/resolvers/statistics-resolver-model";
-import { RedactionData } from "@app/models/component-model/redaction";
+import {RedactionData} from "@app/models/component-model/redaction";
 
 
 @Injectable({
   providedIn: "root"
 })
 export class HttpService {
+  private httpClient = inject(HttpClient);
+  private router = inject(Router);
 
-  constructor(private httpClient: HttpClient, private router: Router) {
-  }
 
   getPublicResource(): Observable<HttpResponse<Root>> {
     return this.httpClient.get<Root>("api/public", {observe: "response"});
@@ -59,6 +59,10 @@ export class HttpService {
 
   requestWhistleBlowerLogin(param: string, header: HttpHeaders): Observable<Session> {
     return this.httpClient.post<Session>("api/auth/receiptauth", param, {headers: header});
+  }
+
+  requestRefreshUserSession(param: SessionRefresh): Observable<Session> {
+    return this.httpClient.post<Session>("api/auth/session", param);
   }
 
   requestDeleteUserSession(): Observable<Session> {

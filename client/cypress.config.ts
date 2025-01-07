@@ -10,7 +10,7 @@ export default defineConfig({
   },
   env: {
     "coverage": true,
-    "default_language": "ar",
+    "language": "en",
     "codeCoverage": {
       "enabled": true
     },
@@ -34,9 +34,11 @@ export default defineConfig({
   },
   e2e: {
     setupNodeEvents(on, config) {
-      return require("./cypress/plugin/index.ts").default(on, config);
+      return require("./cypress/plugins/index.ts").default(on, config);
     },
     baseUrl: "https://127.0.0.1:8443",
+    viewportWidth: 1920,
+    viewportHeight: 1080
   },
   defaultCommandTimeout: 20000,
 });

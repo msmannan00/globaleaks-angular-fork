@@ -30,7 +30,7 @@ from globaleaks.utils.crypto import GCE
 from globaleaks.utils.fs import directory_traversal_check
 from globaleaks.utils.log import log
 from globaleaks.utils.templating import Templating
-from globaleaks.utils.utility import datetime_now, datetime_null, datetime_never
+from globaleaks.utils.utility import datetime_now, datetime_null, datetime_never, get_expiration
 from globaleaks.utils.json import JSONEncoder
 
 
@@ -136,6 +136,10 @@ def db_revoke_tip_access(session, tid, user_id, itip, receiver_id):
 
 @transact
 def grant_tip_access(session, tid, user_id, user_cc, itip_id, receiver_id):
+    log_data = {
+        'recipient_id': receiver_id
+    }
+
     user, rtip, itip = db_access_rtip(session, tid, user_id, itip_id)
     if user_id == receiver_id or not user.can_grant_access_to_reports:
         raise errors.ForbiddenOperation
@@ -143,17 +147,21 @@ def grant_tip_access(session, tid, user_id, user_cc, itip_id, receiver_id):
     new_receiver, _ = db_grant_tip_access(session, tid, user, user_cc, itip, rtip, receiver_id)
     if new_receiver:
         db_notify_grant_access(session, new_receiver)
-        db_log(session, tid=tid, type='grant_access', user_id=user_id, object_id=itip.id)
+        db_log(session, tid=tid, type='grant_access', user_id=user_id, object_id=itip.id, data=log_data)
 
 
 @transact
 def revoke_tip_access(session, tid, user_id, itip_id, receiver_id):
+    log_data = {
+        'recipient_id': receiver_id
+    }
+
     user, rtip, itip = db_access_rtip(session, tid, user_id, itip_id)
     if user_id == receiver_id or not user.can_grant_access_to_reports:
         raise errors.ForbiddenOperation
 
     if db_revoke_tip_access(session, tid, user, itip, receiver_id):
-        db_log(session, tid=tid, type='revoke_access', user_id=user_id, object_id=itip.id)
+        db_log(session, tid=tid, type='revoke_access', user_id=user_id, object_id=itip.id, data=log_data)
 
 
 @transact
@@ -193,22 +201,24 @@ def recalculate_data_retention(session, itip, report_reopen_request):
 
     :param session: An ORM session
     :param itip: The internaltip ORM object
-    :param report_reopen_request: boolean value, true if the report is being reopend
     """
-    new_retention = None
+    prev_expiration_date = itip.expiration_date
     if report_reopen_request:
         # use the context-defined data retention
         ttl = get_ttl(session, models.Context, itip.context_id)
         if ttl > 0:
-            itip.expiration_date = datetime_now() + timedelta(ttl)
+            itip.expiration_date = get_expiration(ttl)
         else:
             itip.expiration_date = datetime_never()
     elif itip.status == "closed" and itip.substatus is not None:
         ttl = get_ttl(session, models.SubmissionSubStatus, itip.substatus)
         if ttl > 0:
-            itip.expiration_date = datetime_now() + timedelta(ttl)
+            itip.expiration_date = get_expiration(ttl)
 
-def db_update_submission_status(session, tid, user_id, itip, status_id, substatus_id, motivation=None):
+    return prev_expiration_date, itip.expiration_date
+
+
+def db_update_submission_status(session, tid, user_id, itip, status_id, substatus_id=None):
     """
     Transaction for registering a change of status of a submission
 
@@ -222,30 +232,26 @@ def db_update_submission_status(session, tid, user_id, itip, status_id, substatu
     if status_id == 'new':
         return
 
-    if itip.crypto_tip_pub_key and motivation is not None:
-        motivation = base64.b64encode(GCE.asymmetric_encrypt(itip.crypto_tip_pub_key, motivation)).decode()
-
-    can_reopen_reports = session.query(models.User.can_reopen_reports).filter(models.User.id == user_id).one()[0]
-    report_reopen_request = itip.status == "closed" and status_id == "opened"
-
-    if report_reopen_request and not can_reopen_reports:
-        raise errors.ForbiddenOperation # mandatory permission setting missing
-
-    if report_reopen_request and motivation is None:
-        raise errors.ForbiddenOperation # motivation must be given when restoring closed tips
-
     itip.status = status_id
     itip.substatus = substatus_id or None
 
-    recalculate_data_retention(session, itip, report_reopen_request)
+    report_reopen_request = itip.status == "closed" and status_id == "opened"
+    prev_expiration_date, curr_expiration_date = recalculate_data_retention(session, itip, report_reopen_request)
 
     log_data = {
       'status': itip.status,
-      'substatus': itip.substatus,
-      'motivation': motivation,
+      'substatus': itip.substatus
     }
 
     db_log(session, tid=tid, type='update_report_status', user_id=user_id, object_id=itip.id, data=log_data)
+
+    if prev_expiration_date != curr_expiration_date:
+        log_data = {
+            'prev_expiration_date': int(datetime.timestamp(prev_expiration_date)),
+            'curr_expiration_date': int(datetime.timestamp(curr_expiration_date))
+        }
+
+        db_log(session, tid=tid, type='update_report_expiration', user_id=user_id, object_id=itip.id, data=log_data)
 
 
 def db_update_temporary_redaction(session, tid, user_id, redaction, redaction_data):
@@ -518,7 +524,7 @@ def db_redact_whistleblower_identity(session, tid, user_id, itip_id, redaction, 
 
 
 @transact
-def update_tip_submission_status(session, tid, user_id, rtip_id, status_id, substatus_id, motivation):
+def update_tip_submission_status(session, tid, user_id, rtip_id, status_id, substatus_id):
     """
     Transaction for registering a change of status of a submission
 
@@ -541,7 +547,7 @@ def update_tip_submission_status(session, tid, user_id, rtip_id, status_id, subs
                                models.ReceiverTip.receiver_id != user_id):
         db_notify_report_update(session, user, rtip, itip)
 
-    db_update_submission_status(session, tid, user_id, itip, status_id, substatus_id, motivation)
+    db_update_submission_status(session, tid, user_id, itip, status_id, substatus_id)
 
 
 def db_access_rtip(session, tid, user_id, itip_id):
@@ -604,7 +610,7 @@ def register_rfile_on_db(session, tid, user_id, itip_id, uploaded_file):
                                 models.InternalTip.tid == tid).one()
 
     rtip.last_access = datetime_now()
-    if uploaded_file['visibility'] == 0:
+    if uploaded_file['visibility'].decode() == 'public':
         itip.update_date = rtip.last_access
 
     if itip.crypto_tip_pub_key:
@@ -646,11 +652,11 @@ def db_get_rtip(session, tid, user_id, itip_id, language):
         rtip.access_date = rtip.last_access
 
     if itip.reminder_date < rtip.last_access:
-        itip.reminder_date = datetime_null()
+        itip.reminder_date = datetime_never()
 
     if itip.status == 'new':
         itip.update_date = rtip.last_access
-        db_update_submission_status(session, tid, user_id, itip, 'opened', None)
+        db_update_submission_status(session, tid, user_id, itip, 'opened')
 
     db_log(session, tid=tid, type='access_report', user_id=user_id, object_id=itip.id)
 
@@ -735,19 +741,23 @@ def db_postpone_expiration(session, itip, expiration_date):
     :param itip: A submission model to be postponed
     :param expiration_date: The date timestamp to be set in milliseconds
     """
+    prev_expiration_date = itip.expiration_date
+
     max_date = 32503676400
     expiration_date = expiration_date / 1000
     expiration_date = expiration_date if expiration_date < max_date else max_date
-    expiration_date = datetime.utcfromtimestamp(expiration_date)
+    expiration_date = datetime.fromtimestamp(expiration_date)
 
     min_date = time.time() + 91 * 86400
     min_date = min_date - min_date % 86400
-    min_date = datetime.utcfromtimestamp(min_date)
+    min_date = datetime.fromtimestamp(min_date)
     if itip.expiration_date <= min_date:
         min_date = itip.expiration_date
 
     if expiration_date >= min_date:
         itip.expiration_date = expiration_date
+
+    return prev_expiration_date, expiration_date
 
 
 def db_set_reminder(session, itip, reminder_date):
@@ -760,7 +770,7 @@ def db_set_reminder(session, itip, reminder_date):
     """
     reminder_date = reminder_date / 1000
     reminder_date = min(reminder_date, 32503680000)
-    reminder_date = datetime.utcfromtimestamp(reminder_date)
+    reminder_date = datetime.fromtimestamp(reminder_date)
 
     itip.reminder_date = reminder_date
 
@@ -824,7 +834,15 @@ def postpone_expiration(session, tid, user_id, itip_id, expiration_date):
     if not user.can_postpone_expiration:
         raise errors.ForbiddenOperation
 
-    db_postpone_expiration(session, itip, expiration_date)
+    prev_expiration_date, curr_expiration_date = db_postpone_expiration(session, itip, expiration_date)
+
+    log_data = {
+      'prev_expiration_date': int(datetime.timestamp(prev_expiration_date)),
+      'curr_expiration_date': int(datetime.timestamp(curr_expiration_date))
+    }
+
+    db_log(session, tid=tid, type='update_report_expiration', user_id=user_id, object_id=itip.id, data=log_data)
+
 
 
 @transact
@@ -959,7 +977,7 @@ def create_identityaccessrequest(session, tid, user_id, user_cc, itip_id, reques
 
 
 @transact
-def create_comment(session, tid, user_id, itip_id, content, visibility=0):
+def create_comment(session, tid, user_id, itip_id, content, visibility='public'):
     """
     Transaction for registering a new comment
     :param session: An ORM session
@@ -973,7 +991,7 @@ def create_comment(session, tid, user_id, itip_id, content, visibility=0):
     _, rtip, itip = db_access_rtip(session, tid, user_id, itip_id)
 
     rtip.last_access = datetime_now()
-    if visibility == 0:
+    if visibility == 'public':
         itip.update_date = rtip.last_access
 
     _content = content
@@ -1123,6 +1141,8 @@ class RTipInstance(OperationHandler):
     def get(self, tip_id):
         tip, crypto_tip_prv_key = yield get_rtip(self.request.tid, self.session.user_id, tip_id, self.request.language)
 
+        tip = yield serializers.process_logs(tip, tip['id'])
+
         if State.tenants[self.request.tid].cache.encryption and crypto_tip_prv_key:
             tip = yield deferToThread(decrypt_tip, self.session.cc, crypto_tip_prv_key, tip)
 
@@ -1167,7 +1187,7 @@ class RTipInstance(OperationHandler):
 
     def update_submission_status(self, req_args, rtip_id, *args, **kwargs):
         return update_tip_submission_status(self.request.tid, self.session.user_id, rtip_id,
-                                            req_args['status'], req_args['substatus'], req_args['motivation'])
+                                            req_args['status'], req_args['substatus'])
 
     def delete(self, itip_id):
         """

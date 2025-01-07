@@ -1,18 +1,20 @@
-===============
 Troubleshooting
 ===============
-Issues and Bug Reporting
+
+Issues and bug reporting
 ------------------------
-If you encounter any issue and you are not able to to run GlobaLeaks:
 
-- Be sure to strictly follow the Installation Guide for installation
-- Be sure to satisfy the Technical Requirements for hardware and operating system version.
-- Search on the support forum to check if a user has already encountered your issue: https://github.com/orgs/globaleaks/discussions
-- Report the issue on the official software ticking system: https://github.com/globaleaks/GlobaLeaks/issues
+If you encounter any issues and are unable to run GlobaLeaks:
 
-Useful Debugging Commands
+- Ensure you strictly follow the Installation Guide.
+- Verify that you meet the Technical Requirements for hardware and operating system version.
+- Search the support forum to see if a user has already encountered your issue: `GlobaLeaks Discussions <https://github.com/orgs/globaleaks/discussions>`_
+- Report the issue on the official software issue tracker: `GlobaLeaks Issues <https://github.com/globaleaks/globaleaks-whistleblowing-software/issues>`_
+
+Useful debugging commands
 -------------------------
-Depending on your setup. There are a few things that are usually the first things to check to see if GlobaLeaks is working.
+
+Depending on your setup, here are some common checks to determine if GlobaLeaks is working:
 
 - Is the service running?
 
@@ -39,9 +41,9 @@ Depending on your setup. There are a few things that are usually the first thing
   less /var/globleaks/log/globaleaks.log
 
 
-Log Files
+Log files
 ---------
-There are a few useful logs and corresponding log files when GlobaLeaks is installed.
+Here are some useful logs and their corresponding files when GlobaLeaks is installed:
 
 **GlobaLeaks process:**
 
@@ -50,4 +52,4 @@ There are a few useful logs and corresponding log files when GlobaLeaks is insta
   /var/globaleaks/log/globaleaks.log
 
 
-The verbosity is configurable via the web interface of the software inside Advanced Settings.
+The verbosity of the logs is configurable via the web interface of the software under Advanced Settings.

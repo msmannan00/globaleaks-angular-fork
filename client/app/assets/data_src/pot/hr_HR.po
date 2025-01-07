@@ -1,7 +1,7 @@
 # 
 # Translators:
 # Denis Smajlović <deni@deni.dk>, 2020
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2014-2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2014-2022
 # Igor <lyricaltumor@gmail.com>, 2015-2018,2020,2022
 # Igor <lyricaltumor@gmail.com>, 2015-2016
 # Sasa Lekovic <sasa.lekovic1@gmail.com>, 2019-2020
@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2014-2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2014-2022\n"
 "Language-Team: Croatian (Croatia) (http://app.transifex.com/otf/globaleaks/language/hr_HR/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -89,20 +89,17 @@ msgstr "Administratori autorizirani za promjenu korisničkih lozinki:"
 msgid "Advanced"
 msgstr "Napredno"
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "Dozvoli primateljima da brišu prijave"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "Dopusti primatelju da odgodi datum isteka prijave"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "Dopusti zviždaču da doda privitke prijavi"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "Dopusti zviždaču da piše komentare"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "Dopusti korisnicima da se prijave"
@@ -194,8 +191,8 @@ msgstr "Prije nego nastavite, molimo postavite novu lozinku."
 msgid "Block the submission"
 msgstr "Blokiraj predaju"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "Potvrđivanjem odgađate datum isteka na:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -267,9 +264,6 @@ msgstr "Konfiguriraj"
 
 msgid "Confirm"
 msgstr "Potvrdi ekstenziju"
-
-msgid "Confirmation"
-msgstr "Potvrda"
 
 msgid "Congratulations!"
 msgstr "Čestitamo!"
@@ -404,6 +398,9 @@ msgstr "Najraniji datum koji se može odabrati"
 
 msgid "Edit"
 msgstr "Uredi"
+
+msgid "Edit the expiration date"
+msgstr "Odgodi datum isteka"
 
 msgid "Email"
 msgstr "Email"
@@ -902,9 +899,6 @@ msgstr "Imajte na umu da će svi povezani podatci biti trajno obrisani."
 
 msgid "Please select your account:"
 msgstr "Molimo odaberite svoj račun:"
-
-msgid "Postpone the expiration date"
-msgstr "Odgodi datum isteka"
 
 msgid "Preferences"
 msgstr "Postavke"

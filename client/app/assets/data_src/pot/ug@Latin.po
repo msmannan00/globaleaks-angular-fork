@@ -1,12 +1,12 @@
 # 
 # Translators:
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2021-2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2021-2022
 # Tughluq Qutluq <tugkutluk@gmail.com>, 2021-2022
 msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2021-2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2021-2022\n"
 "Language-Team: Uighur (Latin) (http://app.transifex.com/otf/globaleaks/language/ug@Latin/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -84,20 +84,17 @@ msgstr "Bashqurghuchilargha ishletküchi parollirini özgertishke hoquq bérildi
 msgid "Advanced"
 msgstr ""
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "Tapshuriwalghuchilarning melumatlarni öchürishige ruxset qil"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "Tapshuriwalghuchining melumat sürükini keynige sürishige ruxset qil"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "Pash qilghuchining melumatqa qoshumche qisturishigha ruxset qil"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "Pash qilghuchining baha yézishige ruxset qil"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "Ishletküchilerning tizimlitishigha ruxset qil"
@@ -189,8 +186,8 @@ msgstr "Bir terep qilishtin burun, yéngi bir parol belgileng."
 msgid "Block the submission"
 msgstr "Tapshurushni chekle"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "Jezimlisingiz, sürük chéslasini bu kün’ge keynige sürgen bolisiz:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -262,9 +259,6 @@ msgstr "Seple"
 
 msgid "Confirm"
 msgstr "Jezimle"
-
-msgid "Confirmation"
-msgstr "Jezmleng"
 
 msgid "Congratulations!"
 msgstr "Tebrikleymiz!"
@@ -399,6 +393,9 @@ msgstr "Tallashqa bolidighan eng baldurqi chisla"
 
 msgid "Edit"
 msgstr "Tehrirle"
+
+msgid "Edit the expiration date"
+msgstr "Sürük chéslasini keynige sür"
 
 msgid "Email"
 msgstr "Élxet"
@@ -897,9 +894,6 @@ msgstr "Munasiwetlik barliq sanliq melumatlarnng menggülük öchürürilidighan
 
 msgid "Please select your account:"
 msgstr "Hésabingizni tallang:"
-
-msgid "Postpone the expiration date"
-msgstr "Sürük chéslasini keynige sür"
 
 msgid "Preferences"
 msgstr "Mayilliqlar"

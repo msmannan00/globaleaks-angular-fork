@@ -1,4 +1,5 @@
-import {Injectable} from "@angular/core";
+import {Location} from '@angular/common';
+import {Injectable, inject} from "@angular/core";
 import {HttpService} from "@app/shared/services/http.service";
 import {UtilsService} from "@app/shared/services/utils.service";
 import {AppDataService} from "@app/app-data.service";
@@ -8,15 +9,28 @@ import {Router, NavigationEnd, ActivatedRoute} from "@angular/router";
 import {AuthenticationService} from "@app/services/helper/authentication.service";
 import {LanguagesSupported} from "@app/models/app/public-model";
 import {TitleService} from "@app/shared/services/title.service";
-import {ErrorCodes} from "@app/models/app/error-code";
+import {NgZone} from "@angular/core";
 
 @Injectable({
   providedIn: "root"
 })
 export class AppConfigService {
+  private location = inject(Location);
+  private titleService = inject(TitleService);
+  authenticationService = inject(AuthenticationService);
+  private translationService = inject(TranslationService);
+  private utilsService = inject(UtilsService);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private httpService = inject(HttpService);
+  private appDataService = inject(AppDataService);
+  private fieldUtilitiesService = inject(FieldUtilitiesService);
+  private ngZone = inject(NgZone);
+  private isRunning: boolean = false;
+
   public sidebar: string = "";
 
-  constructor(private titleService: TitleService, public authenticationService: AuthenticationService, private translationService: TranslationService, private utilsService: UtilsService, private router: Router, private activatedRoute: ActivatedRoute, private httpService: HttpService, private appDataService: AppDataService, private fieldUtilitiesService: FieldUtilitiesService) {
+  constructor() {
     this.init();
   }
 
@@ -31,7 +45,7 @@ export class AppConfigService {
   initRoutes(currentURL: string) {
     if (this.authenticationService && this.authenticationService.session && currentURL !== "login") {
       const queryParams = this.activatedRoute.snapshot.queryParams;
-      const param = localStorage.getItem("default_language");
+      const param = sessionStorage.getItem("language");
       if (param) {
         queryParams["lang"] = param;
       }
@@ -43,8 +57,6 @@ export class AppConfigService {
       } else if (this.authenticationService.session.role === "custodian") {
         this.router.navigate(["/custodian"], {queryParams}).then();
       }
-    } else {
-      localStorage.removeItem("default_language");
     }
   }
 
@@ -57,67 +69,12 @@ export class AppConfigService {
     this.titleService.setTitle();
   };
 
-  removeElementById(elementId:string) {
-    const element = document.getElementById(elementId);
-    if (element) {
-      element.remove();
-    }
-  }
-
   public localInitialization(languageInit = true, callback?: () => void) {
     this.httpService.getPublicResource().subscribe({
       next: data => {
         if (data.body !== null) {
           this.appDataService.public = data.body;
         }
-
-        let elem;
-        if (window.location.pathname === "/") {
-          if (this.appDataService.public.node.css) {
-            elem = document.getElementById("load-custom-css");
-            if (elem === null) {
-              elem = document.createElement("link");
-              elem.setAttribute("id", "load-custom-css");
-              elem.setAttribute("rel", "stylesheet");
-              elem.setAttribute("type", "text/css");
-              elem.setAttribute("href", "s/css");
-              document.getElementsByTagName("head")[0].appendChild(elem);
-            }
-          }
-
-          if (this.appDataService.public.node.script) {
-            elem = document.getElementById("load-custom-script");
-            if (elem === null) {
-              elem = document.createElement("script");
-              elem.setAttribute("id", "load-custom-script");
-              elem.setAttribute("src", "s/script");
-              let self = this;
-              window.addEventListener('error', function(event) {
-                const removeElement = (id: string) => {
-                  const elem = document.getElementById(id);
-                  if (elem) {
-                    elem.remove();
-                  }
-                };
-
-                if (event.filename && event.filename.includes("s/script")) {
-                  removeElement('load-custom-script');
-                  removeElement('load-custom-css');
-                  self.appDataService.errorCodes = new ErrorCodes(event.message.substring(0, 50), 15, "");
-                }
-              });
-              document.getElementsByTagName("body")[0].appendChild(elem);
-            }
-          }
-
-          if (this.appDataService.public.node.favicon) {
-            const element = window.document.getElementById("favicon");
-            if (element !== null) {
-              element.setAttribute("href", "s/favicon");
-            }
-          }
-        }
-
         this.appDataService.contexts_by_id = this.utilsService.array_to_map(this.appDataService.public.contexts);
         this.appDataService.receivers_by_id = this.utilsService.array_to_map(this.appDataService.public.receivers);
         this.appDataService.questionnaires_by_id = this.utilsService.array_to_map(this.appDataService.public.questionnaires);
@@ -160,23 +117,24 @@ export class AppConfigService {
           }
         });
 
-        let storageLanguage = localStorage.getItem("default_language");
+        let storageLanguage = sessionStorage.getItem("language");
         const queryParams = this.activatedRoute.snapshot.queryParams;
         if (languageInit) {
           if (!storageLanguage) {
             storageLanguage = this.appDataService.public.node.default_language;
-            localStorage.setItem("default_language", storageLanguage);
+            sessionStorage.setItem("language", storageLanguage);
           }
           if(!queryParams["lang"]){
             const setTitle = () => {
               this.titleService.setTitle();
             };
             this.translationService.onChange(storageLanguage, setTitle);
-          }else {
+          } else {
             this.translationService.onChange(storageLanguage);
           }
+        } else {
+          this.translationService.onChange(storageLanguage || 'en');
         }
-
 
         this.titleService.setTitle();
         this.onValidateInitialConfiguration();
@@ -191,11 +149,11 @@ export class AppConfigService {
     if (this.appDataService.public.node) {
       if (!this.appDataService.public.node.wizard_done) {
         location.replace("/#/wizard");
-      } else if ((this.router.url === "/" || this.router.url === "/submission") && this.appDataService.public.node.adminonly && !this.authenticationService.session) {
-        location.replace("/#/admin/home");
-      } else if (this.router.url === "/" && this.appDataService.public.node.enable_signup && !location.href.endsWith("admin/home")) {
+      } else if ((this.location.path() === "" || this.location.path() === "/submission") && !this.appDataService.public.node.enable_signup && this.appDataService.public.node.adminonly && !this.authenticationService.session) {
+        location.replace("/#/login");
+      } else if (this.location.path() === "" && this.appDataService.public.node.enable_signup && !location.href.endsWith("admin/home")) {
         location.replace("/#/signup");
-      } else if (this.router.url === "/signup" && !this.appDataService.public.node.enable_signup) {
+      } else if (this.location.path() === "/signup" && !this.appDataService.public.node.enable_signup) {
         location.replace("/#/");
       } else if (this.appDataService.page === "blank") {
         this.appDataService.page = "homepage"

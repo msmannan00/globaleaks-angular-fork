@@ -119,8 +119,7 @@ class BaseHandler(object):
         if hasattr(self, 'session'):
             return self.session
 
-        # Check session header
-        session_id = self.request.headers.get(b'x-session')
+        session = None
 
         # Check token header and arg
         token = self.request.headers.get(b'x-token')
@@ -132,25 +131,23 @@ class BaseHandler(object):
             try:
                 self.token = self.state.tokens.validate(token)
                 if self.token.session is not None:
-                    session_id = self.token.session.id.encode()
+                    session = self.token.session
             except:
                 return
 
-        if session_id is None:
-            return
-
-        session = Sessions.get(session_id.decode())
+        # Check session header
+        session_id = self.request.headers.get(b'x-session')
+        if session_id:
+            session = Sessions.get(session_id.decode())
 
         if session is None or session.tid != self.request.tid:
             return
 
-        self.session = session
-
-        if self.session.user_role != 'whistleblower' and \
+        if session.user_role != 'whistleblower' and \
            self.state.tenants[1].cache.get('log_accesses_of_internal_users', False):
              self.request.log_ip_and_ua = True
 
-        return self.session
+        return session
 
     @staticmethod
     def validate_python_type(value, python_type):
@@ -344,6 +341,12 @@ class BaseHandler(object):
         file_id = self.request.args[b'flowIdentifier'][0].decode()
 
         if file_id not in self.state.TempUploadFiles:
+            if self.session and self.session.user_role == 'whistleblower':
+                State.RateLimitingTable.check(self.request.path + b'#' + self.session.user_id.encode(),
+                                              State.tenants[1].cache.threshold_attachments_per_hour_per_report)
+                State.RateLimitingTable.check(self.request.path + b'#' + self.request.client_ip.encode(),
+                                              State.tenants[1].cache.threshold_attachments_per_hour_per_ip)
+
             self.state.TempUploadFiles[file_id] = SecureTemporaryFile(Settings.tmp_path)
 
         f = self.state.TempUploadFiles[file_id]
@@ -412,6 +415,5 @@ class BaseHandler(object):
             err_tup = ("Handler [%s] exceeded execution threshold (of %d secs) with an execution time of %.2f seconds",
                        self.name, self.handler_exec_time_threshold, self.request.execution_time.seconds)
             log.err(tid=self.request.tid, *err_tup)
-            self.state.schedule_exception_email(self.request.tid, *err_tup)
 
         track_handler(self)

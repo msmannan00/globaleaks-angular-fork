@@ -1,3 +1,365 @@
+Changes in version 5.0.41
+    Re-add markdown support to recipients and context descriptions (#4364)
+    Bump client dependencies to latest version
+
+Changes in version 5.0.40
+    Fix visualization of enforced recipients broken in 5.0.0
+
+Changes in version 5.0.39
+    Ensure voice questions could work when defined in question templates
+    Bump pdfjs again to v4 with proper packaging
+    Bump client dependencies to latest version
+
+Changes in version 5.0.38
+    Correct PDF viewer re-including pdfjs v3
+
+Changes in version 5.0.37
+    Fix visualization of uploaded configuration files
+    Revise detection and messaging about unsupported browsers
+    Bump client dependencies to latest versions
+
+Changes in version 5.0.36
+    Fix loading of customizations in compatibility with new CSP
+
+Changes in version 5.0.35
+    Revise implementation of CSP in relation to 'report-sample' directive
+
+Changes in version 5.0.34
+    Revise Trusted-Types implementation enforcing usage of a 'default' policy
+    Implement handler to collect reporting of attemps of violation to the Content Security Policy
+    [doc] Extend documentation adding detail about the revisions on the Content Security Policy
+
+Changes in version 5.0.33
+    Complete implementation of CSP policy based on Trusted-Types
+    Enforce validation of every admin config or user input by means of DOMPurify
+    Restrict usage of CSS inline scripts (#4345) as previously done on v4
+    Fix bug in gl-admin utility preventing possibility to reset 2fa
+    Correct feature of re-ordering of questions options (#4348)
+    Fix issues #4341, #4344
+    Improve packaging of css libraries and overrides
+    Bump client dependencies to latest versions
+    Update translations
+
+Changes in version 5.0.32
+    Revise language changes utilities in relation to issue #4315
+    Fixed validation of multistep questionnaires and extend validation to files (#4336)
+    Remove redundant rel=noreferrer made unnecessary by ReferrerPolicy header
+    Revise markdown implementation ensuring links are opened always in a new tab
+    Ensure to strip every HTML tag (including safe tags) with DOMPurify before parsing markdown.
+    [doc] Revise application security document in reference to external links protections
+    [doc] Extend documentation adding detail on usage of DOMPurify to filter markdown input
+    Fix issues #4340 and #4338
+
+Changes in version 5.0.31
+    Revise mock implementation fixing continous reloading on some setups
+
+Changes in version 5.0.30
+    Temporarily rollback changes related to enforcing mandatory file uploads or oral messages
+    introduced in 5.0.26 that seems to be causing improper form validation.
+
+Changes in version 5.0.29
+    Fix regression on questionnaire validation introduced in release 5.0.26 (#4321)
+
+Changes in version 5.0.28
+    Fix bug in relation to loader not getting removed
+    Revise margins on UI components of the homepage
+    Fix bug and performance on mock implementation using MutationObserver
+    Bump client dependencies to latest version
+    Update translations
+
+Changes in version 5.0.27
+    Fix issue #4308
+    Fix color of SupportLink
+    Bump client dependencies to latest versions
+
+Changes in version 5.0.26
+    Deprecate (at least temporarely) states motivations for reasons discussed on #4201 with the core globaleaks community.
+    Revise regular expression for email validation to allow domains with tld longer than 5 characters (#4309)
+    Fix inclusion of pdfjs library fix issue on opening PDF files with integrated file viewer
+    Fix issue on loading of images causing white page on settings page (#4311)
+    Fix mandatory checks on file uploads and voice recordings
+    Fix exception on email generation when users has disabled notifications
+    Bump client dependencies to latest versions
+
+Changes in version 5.0.25
+    Revise receiver and context images style (#4303)
+    Revise path checks in relation to adminonly configurations
+    Properly communicate to users when a password reset token is expired
+    Bump client dependencies to latest version
+
+Changes in version 5.0.24
+    Fix proper visualization of checkboxes and datepickers
+
+Changes in version 5.0.23
+    Fix visualization of steps with no questions (#4298)
+
+Changes in version 5.0.22
+    Correct position of tooltips on questions' hint
+    Enable recipients whistleblowers to leave comments even if report status is closed (#4293)
+    Revise configuration of chunk file uploader
+    Bump client dependencies to latest version
+    Fix pagination style merging changes of 4205edef
+    Fix exception when file upload happens during expired user session
+
+Changes in version 5.0.21
+    Fix translation of report statuses in case labels are left empty by mistake
+    Bump client dependencies to latest versions
+    Uptate translations
+
+Changes in version 5.0.20
+    Fix retrival of account recovery key when 2FA is enabled
+
+Changes in version 5.0.19
+    Update codebase to use new angular 17 standalone components and control flow
+    Correct accessibility of language selector
+    Fix issue #4278
+    Revise colors of the application
+    Revise sticky footer implementation using Bootstrap 5 classes
+    Bump client dependencies to latest version
+    Update translations
+    Update brand assets
+    Rename main branch in stable
+    [ci] Revise tests to improve screenshots
+
+Changes in version 5.0.18
+    Adopt OpenSSF Scorecard and implement most of the recommendations
+    Add OpenSSF Scorecard to README.md
+    Ensure docker images uses pinned dependencies
+    Enable CodeQL action
+    Enable Dependabot action
+    Revise default permission on workflows
+    Strip HTML from Markdown text using DOMPurify
+    Revise login redirect and implement sanitization
+    Correct accessibility of language selector
+    Revise audit logs tracking users target of grant/revoke
+      report operations
+    Revise report search making it possible to make full text search
+      on the entire report
+    Fix audit log exporting correctly the object column (#4248)
+    Correct exceptions in relation to ngx-translate/core/issues/782
+    Fix translation of string:
+      Allow the recipient to edit the reports' expiration date
+    Use postcss-rtlcss to create a single optimized CSS bundle
+      supporting both ltr and rtl
+    Optimize loading of css files including primary fonts in main css
+     and ensuring secondary fonts are lazy-loaded
+    Revise CSS colors in relation to globaleaks visual identity
+    Apply GLBOALEAKS brand colors via SCSS
+    Update GlobaLeaks visual identity document
+    Update translations
+    Bump client dependencies to latest version
+    [doc] Update documentation images
+
+Changes in version 5.0.17
+    Fix logins exceptions on systems still apparently not implementing encryption introduced in 5.0.16
+
+Changes in version 5.0.16
+    Remove the content-language header from the http headers preferring to dynamically set the language in HTML
+    Revise UI Mock implementation
+    Revise implementation of pagination interface improving accessibility and internationalization
+    Bump client dependencies to latest version
+    Add Greenlandic translation
+    Update translations
+    Revise fix for #4228
+    [doc] Enable generation of documentation in ar, it, fr, es, ru, zu-cn
+          These languages now features texts in english but translated images
+
+Changes in version 5.0.15
+    Fix correct redirection after login
+
+Changes in version 5.0.14
+    Reiplement 'public' class on each whistleblower's page
+
+Changes in version 5.0.13
+    Fix issue #4228
+    Ensure to set html lang attribute when varying language (#4198)
+    Ensure to set html dir attribute depending on the language used
+    Correct logo and favicon removing incorrectly added black border
+    Revise wrong positioning of checkboxes on wizard interface
+    Revise gl-admin tool fixing configuration of intergers variables
+    Revise gl-admin tool making configuration of boolean values case insensitive
+    Bump client dependencies to latest versions
+    Update client dependencies shrinkwrap
+    [doc] Revise documentation informing users that a 64-bit system is required to run GlobaLeaks (#4202)
+
+Changes in version 5.0.12
+    Add ConnectionRefusedError to list of silenced exceptions
+    Revise implementation of periodic jobs and implement minutely exception notifications limits
+    Revise functionality and UI for date range questions
+    Ensure reports could be exported even if one single answer fails to be processed
+    Fix pdf export (available for the moment only on Ubuntu Noble)
+    Implement full case insensitive search on admin's sites interface
+    Order audit log entries with descending order
+    Extend client session idling time from 5 to 20 minutes
+    Fix issues #4209, #4218, #4217, #4207, #4211
+    Revise Language configuration UI improving usability
+    Apply CSS fixes to improve adherence to GlobaLeaks brand color
+    Uniform layout of checkboxes and radios using boostrap classes (#4216)
+    Include Ubuntu Noble in current recommended LTS distributions along with Debian Bookworm
+    Bump client dependencies to latest version
+    Update client dependencies shrinkwrap
+    Update translations
+    [ci] Update tests in relation to latest changes
+    [doc] Update documentation images
+
+Changes in version 5.0.11
+    Correct decryption of change status motivations for whistleblowers
+
+Changes in version 5.0.10
+    Revert "Update codebase to new angular control flow-directive" causing instabilities on 5.0.9
+
+Changes in version 5.0.9
+    Fix failure in the loading of translations at first load of the application introduced in 5.0.7 (#4194)
+    Reimplement override of localStorage with sessionStorage (#3277)
+    Replace usages of localStorage with sessionStorage
+    Bump client dependencies to latest versions
+
+Changes in version 5.0.8
+    Fix multilang export of questionnaires (#4190)
+    Bump client dependencies to latest version
+    Update translations
+
+Changes in version 5.0.7
+    Revise implementation of form validation
+    Implement language changes on ng-bootstrap datepicker
+    Revise internationalization issues
+    Revise admin sidebar menu fixing "Channels" link
+    Bump client dependencies to latest version
+    Update translations
+
+Changes in version 5.0.6
+    Change text "Postpone the expiration date" to "Edit the expiration date" (#4175)
+    Revise reports' statuses configuration (#4177)
+    Fix regression on reports search introduced in release 5.0.0 (#4184)
+    Correct missing translation for "Privacy" and "Whistleblowing" policies link
+    Update list of italian ministries and authorities using the software
+    Revise description of the software adding reference to DPG recognition
+    Update client dependencies to latest versions
+    Update translations
+
+Changes in version 5.0.5
+    Fix regression #4181
+    Apply accessibility fixes as for ticket #3998
+    Update client dependencies to latest version
+    Update translations
+
+Changes in version 5.0.4
+    Apply accessibility fixes as for ticket #3998
+    Preserve newlines during markdown rendering (#4179)
+    Fix internationalization issue on report page
+    Disable caching of Tor descriptors
+    Preserve newlines during markdown rendering (#4179)
+    Fix internationalization issue on report page
+    Revise session implementation fixing file downloads bug introduced in 5.0.3
+    Update client dependencies to latest version
+    Update translations
+
+Changes in version 5.0.3
+    Implement encrypted sessions minimizing exposure of users keys
+    Revise implementation of questionnaires' step navigation
+    Make new reports expire at 23:59:59 UTC
+    Fix visualization of disabled reminder showing incorrecly as '3000-01-01'
+    Fix issue #4172
+    [doc] Update application security spec with detail on session encryption
+    [doc] Update documentation about usage of Angualar in place of AngularJS
+    [doc] Revise software features descriptions
+    [doc] Update list of italian public agencies using the software
+    [doc] Update documentation images
+    Bump client dependencies to latest version
+    Update translations
+
+Changes in version 5.0.2
+    Fix loading of channels when context id is provided as URL parameter
+    Fix implementation of file enabler in relation to 2fa confirmation
+    Implement few fixes as by suggestion #4058
+    Add version bump script
+    Update client dependencies to latest version
+
+Changes in version 5.0.1
+    Avoid to send emails when handlers exceed execution threshold
+    Enable to use markdown in ToSs' labels
+    Correct login interface for admin in relation to simplified login
+    Revise interface showing files on related questions
+    Bump client dependencies to latest version
+    [ci] Revise tests and improve screenshots collection
+    [doc] Update documentation images
+
+Changes in version 5.0.0
+    Implement full client rewrite on the base of Angular 18 and Bootstrap 5
+    Display report expiration date changes on report page (#4116)
+    Display report status changes and their motivations on report page. (#4115)
+    Bump client dependencies to latest version
+    Update translations
+
+Changes in version 4.15.9
+    Fix setting of expiration date upon report repopening
+    Bump npm dependencies to latest versions
+    Update translations
+
+Changes in version 4.15.8
+    Revert raising of proof of work token complexity requiring more testing
+    Bump npm dependencies to latest versions
+    Update translations
+
+Changes in version 4.15.7
+    Apply proof of work to sessions renewal
+    Implement rate limiting on whistleblowers' reports and attachments
+    Implement cache reset when a configuration variable is varied with gl-admin
+    Revise reminder implementation in relation to ticket #4121
+    Fix bell icon indicating reports with active reminder date
+    Ensure app shows app after loading all the translations
+    Silence reporting of exceptions of type sqlalchemy.exc.OperationalError
+    Bump npm dependencies to latest versions
+    [doc] Update application security specs about rate limiting features
+
+Changes in version 4.15.6
+    Fix act as operator functionality broken since 4.15.0 (#4099)
+    Temporarily remove interfaces to provide a motivation on report status change
+      Since the feature is not complete many users appear very confused of having
+      to enter a motivation that is not shown.
+      The functionality will be reintroduced soon soon with a complete implementation.
+    Raise complexity of proof of work on sessions
+    Implement basic QoS algorithm on handling of virtual hosting limiting
+      burst of traffic.
+
+Changes in version 4.15.5
+    Fix: Do not notify report updates when personal notes are loaded
+    Update translations
+
+Changes in version 4.15.4
+    Revert change introduced in 4.15.3 to prevent updating report date
+    at the time of first report opening following community preference
+    Add packaging for Ubuntu 24.04 (Noble Numbat)
+    Bump npm dependencies to latest version
+    Update translations
+
+Changes in version 4.15.3
+    Do not consider opening a report for the first time as a report update
+
+Changes in version 4.15.2
+    Correct definition of symbol OP_CLEANSE_PLAINTEXT causing malfunction
+    on 4.15.1 in systems running with OpenSSL <= 3.0.0
+
+Changes in version 4.15.1
+    Apply revision and optimization to TLS configurations
+    Fix bug on admin operation handlers preventing to reset 2fa of users
+    Bump npm dependencies to latest versions
+    Update translations
+
+Changes in version 4.15.0
+    Fix issues #4019, #4020
+    Do not loose channel selection when changing platform language
+    Make it possible to use channel id parameter on homepage link
+    Fix memory leak on speaker anonymization algorithm
+    Implement deletion of audit logs after 5 years or report deletion
+    Do not require mandatory motivation on report close
+    Extend gl-admin command adding possibility to change encrypted passwords
+    Deprecate old migrations for globaleaks versions < 4.0.0
+    Optimize Tor loading enabling permanent data dir
+    Bump npm dependencies to latest versions
+    Update translations
+    [doc] Add reference to new security audit report by ISGroup
+
 Changes in version 4.14.8
     Fix failure on configuration of network filter introduced in 4.14.0 (#3971)
     Fix failure on the upload of PGP keys (#3970)

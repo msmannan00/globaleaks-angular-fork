@@ -69,12 +69,14 @@ class TestAPI(TestGL):
 
         server_headers = [
             ('Cache-control', 'no-store'),
-            ('Content-Language', 'en'),
             ('Content-Security-Policy', 'base-uri \'none\';' \
-                                        'default-src \'none\';' \
+                                        'default-src \'none\' \'report-sample\';' \
                                         'form-action \'none\';' \
                                         'frame-ancestors \'none\';' \
-                                        'sandbox;'),
+                                        'sandbox;' \
+                                        'trusted-types;' \
+                                        'require-trusted-types-for \'script\';'
+                                        'report-uri /api/report;'),
             ('Cross-Origin-Embedder-Policy', 'require-corp'),
             ('Cross-Origin-Opener-Policy', 'same-origin'),
             ('Cross-Origin-Resource-Policy', 'same-origin'),
@@ -109,19 +111,19 @@ class TestAPI(TestGL):
         self.assertEqual(request.responseCode, 302)
 
         # Local HTTP connection on port 8082 should be marked as not coming from Tor
-        request = forge_request(uri=b'http://127.0.0.1:8082/', client_addr=IPv4Address('TCP', '127.0.0.1', 12345))
+        request = forge_request(uri=b'http://127.0.0.1:8082/', client_addr=b'127.0.0.1')
         self.api.render(request)
         self.assertFalse(request.client_using_tor)
         self.assertEqual(request.responseCode, 302)
 
         # Local HTTP connection on port 8083 should be marked as coming from Tor
-        request = forge_request(uri=b'http://127.0.0.1:8083/', client_addr=IPv4Address('TCP', '127.0.0.1', 12345))
+        request = forge_request(uri=b'http://127.0.0.1:8083/', client_addr=b'127.0.0.1')
         self.api.render(request)
         self.assertTrue(request.client_using_tor)
         self.assertEqual(request.responseCode, 302)
 
         # Remote HTTP connection not coming from Tor should be redirected to HTTPS
-        request = forge_request(uri=b'http://www.globaleaks.org/', client_addr=IPv4Address('TCP', '8.8.8.8', 12345))
+        request = forge_request(uri=b'http://www.globaleaks.org/', client_addr=b'8.8.8.8')
         self.api.render(request)
         self.assertFalse(request.client_using_tor)
         self.assertEqual(request.responseCode, 302)

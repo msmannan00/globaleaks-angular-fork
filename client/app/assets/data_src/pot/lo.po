@@ -1,12 +1,12 @@
 # 
 # Translators:
 # Cheer Zeng <cheerz6623@gmail.com>, 2021
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2021-2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2021-2022
 msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2021-2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2021-2022\n"
 "Language-Team: Lao (http://app.transifex.com/otf/globaleaks/language/lo/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -84,20 +84,17 @@ msgstr "ຜູ້ເບິ່ງແຍງລະບົບໄດ້ຮັບອະ
 msgid "Advanced"
 msgstr ""
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "ອະນຸຍາດໃຫ້ຜູ້ຮັບລຶບລາຍງານ"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "ອະນຸຍາດໃຫ້ຜູ້ຮັບເລື່ອນວັນທີໝົດອາຍຸໃນການລາຍງານ"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "ອະນຸຍາດໃຫ້ຜູ້ແຈ້ງເບາະແສເພີ່ມເອກະສານຄັດຕິດຕື່ມໃສ່ລາຍງານ"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "ອະນຸຍາດໃຫ້ຜູ້ແຈ້ງເບາະແສຂຽນຄຳຄິດເຫັນໄດ້"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "ອະນຸຍາດໃຫ້ຜູ້ໃຊ້ລົງທະບຽນ"
@@ -189,8 +186,8 @@ msgstr "ກ່ອນດຳເນີນການ, ກະລຸນາຕັ້ງ�
 msgid "Block the submission"
 msgstr "ບລັອກການສົ່ງ"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "ການຢືນຢັນ, ໝາຍຄວາມວ່າທ່ານຈະເລື່ອນວັນທີໝົດອາຍຸໄປຍັງ:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -262,9 +259,6 @@ msgstr "ກຳນົດຄ່າ"
 
 msgid "Confirm"
 msgstr "ຢືນຢັນ"
-
-msgid "Confirmation"
-msgstr "ການຢືນຢັນ"
 
 msgid "Congratulations!"
 msgstr "ຂໍສະແດງຄວາມຍິນດີດ້ວຍ!"
@@ -399,6 +393,9 @@ msgstr "ວັນທີທີ່ສາມາດເລືອກໄດ້ໄວທ
 
 msgid "Edit"
 msgstr "ແກ້ໄຂ"
+
+msgid "Edit the expiration date"
+msgstr "ເລື່ອນວັນທີໝົດອາຍຸ"
 
 msgid "Email"
 msgstr "ອີເມວ"
@@ -897,9 +894,6 @@ msgstr "ກະລຸນາຊາບວ່າ ຂໍ້ມູນທີ່ກ່�
 
 msgid "Please select your account:"
 msgstr "ກະລຸນາເລືອກບັນຊີຂອງທ່ານ:"
-
-msgid "Postpone the expiration date"
-msgstr "ເລື່ອນວັນທີໝົດອາຍຸ"
 
 msgid "Preferences"
 msgstr "ການກຳນົດຄ່າທີ່ມັກ"

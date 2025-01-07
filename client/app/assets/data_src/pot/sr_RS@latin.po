@@ -3,7 +3,7 @@
 # A P <petrovski.albert@gmail.com>, 2016
 # Filip Parag, 2021
 # Filip Parag, 2021
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2014-2015,2021-2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2014-2015,2021-2022
 # Ivan Petrovic <ivan@ipplus.rs>, 2013-2014
 # Natasa Stankovic, 2021
 # Natasa Stankovic, 2021
@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2014-2015,2021-2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2014-2015,2021-2022\n"
 "Language-Team: Serbian (Latin) (Serbia) (http://app.transifex.com/otf/globaleaks/language/sr_RS@latin/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -90,20 +90,17 @@ msgstr "Administratori koji mogu menjati korisničke lozinke:"
 msgid "Advanced"
 msgstr "Напредно"
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "Dozvoli primaocu da briše dojave"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "Dozvoli primaocu da odloži datum isteka dojave"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "Dozvoli uzbunjivaču da dodaje priloge u prijavu"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "Dozvoli uzbunjivaču da piše komentare"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "Dozvoli korisnicima da se registruju"
@@ -195,8 +192,8 @@ msgstr "Pre nego što nastavite, kreirajte novu lozinku."
 msgid "Block the submission"
 msgstr "Blokiraj dojavljivanje"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "Ako potvrdite, odložićete datum isteka na:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -268,9 +265,6 @@ msgstr "Podesi"
 
 msgid "Confirm"
 msgstr "Potvrdi"
-
-msgid "Confirmation"
-msgstr "potvrda"
 
 msgid "Congratulations!"
 msgstr "Čеstitаmо!"
@@ -405,6 +399,9 @@ msgstr "Najraniji dozvoljeni datum"
 
 msgid "Edit"
 msgstr "Izmeni"
+
+msgid "Edit the expiration date"
+msgstr "Odloži datum isteka"
 
 msgid "Email"
 msgstr "Imejl"
@@ -903,9 +900,6 @@ msgstr "Imajte u vidu da će svi povezani podaci biti trajno izbrisani."
 
 msgid "Please select your account:"
 msgstr "Izaberite nalog:"
-
-msgid "Postpone the expiration date"
-msgstr "Odloži datum isteka"
 
 msgid "Preferences"
 msgstr "Željene postavke"

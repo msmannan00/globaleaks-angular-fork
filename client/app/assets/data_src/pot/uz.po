@@ -1,14 +1,14 @@
 # 
 # Translators:
 # Adham Kurbanov <uz@zu.uz>, 2021
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2021-2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2021-2022
 # Nurkamol Vokhidov <nurkamol@gmail.com>, 2021
 # Nurkamol Vokhidov <nurkamol@gmail.com>, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2021-2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2021-2022\n"
 "Language-Team: Uzbek (http://app.transifex.com/otf/globaleaks/language/uz/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -86,20 +86,17 @@ msgstr "Quyidagi administratorlar foydalanuvchilar parolini oʻzgartira oladi:"
 msgid "Advanced"
 msgstr "Qo‘shimcha"
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "Qabul qiluvchiga anonim xabarlarni oʻchirish imkonini berish"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "Qabul qiluvchi anonim xabar muddatini kechiktirishiga ruxsat berish"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr ""
 
 msgid "Allow the whistleblower to write comments"
 msgstr "Oshkor qiluvchilar fikr bildirishiga ruxsat berish"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "Foydalanuvchilarga roʻyxatdan oʻtish imkonini berish"
@@ -191,8 +188,8 @@ msgstr "Davom etishdan oldin yangi parol belgilang."
 msgid "Block the submission"
 msgstr "Joylanmani bloklash"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "Tasdiqlansa, muddat quyidagi sanagacha kechiktiriladi:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -263,9 +260,6 @@ msgid "Configure"
 msgstr "Sozlash"
 
 msgid "Confirm"
-msgstr "Tasdiqlash"
-
-msgid "Confirmation"
 msgstr "Tasdiqlash"
 
 msgid "Congratulations!"
@@ -401,6 +395,9 @@ msgstr "Erta tanlanadigan sana"
 
 msgid "Edit"
 msgstr "Tahrirlash"
+
+msgid "Edit the expiration date"
+msgstr "Muddatini uzaytirish"
 
 msgid "Email"
 msgstr "Email manzil"
@@ -899,9 +896,6 @@ msgstr "Tegishli axborot butunlay oʻchib ketishini unutmang."
 
 msgid "Please select your account:"
 msgstr "Hisobingizni tanlang:"
-
-msgid "Postpone the expiration date"
-msgstr "Muddatini uzaytirish"
 
 msgid "Preferences"
 msgstr "Sozlamalar"

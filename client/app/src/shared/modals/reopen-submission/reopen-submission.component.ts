@@ -1,20 +1,30 @@
-import {Component} from "@angular/core";
-import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Component, inject} from "@angular/core";
+import {NgbActiveModal, NgbModal, NgbTooltipModule} from "@ng-bootstrap/ng-bootstrap";
+import {FormsModule} from "@angular/forms";
+import {NgClass} from "@angular/common";
+import {TranslateModule} from "@ngx-translate/core";
+import {TranslatorPipe} from "@app/shared/pipes/translate";
 
 @Component({
-  selector: 'src-reopen-submission',
-  templateUrl: './reopen-submission.component.html',
+    selector: 'src-reopen-submission',
+    templateUrl: './reopen-submission.component.html',
+    standalone: true,
+    imports: [
+      FormsModule,
+      NgbTooltipModule,
+      NgClass,
+      TranslateModule,
+      TranslatorPipe
+    ],
 })
 export class ReopenSubmissionComponent {
-  arg:{ motivation: string}={motivation: ""};
-  constructor(private modalService: NgbModal, private activeModal: NgbActiveModal) {
-  }
- 
-  confirmFunction: (motivation: string) => void;
-  
-    confirm(arg: string) {
-      this.confirmFunction(arg);
-      return this.activeModal.close(arg);
+  private modalService = inject(NgbModal);
+  private activeModal = inject(NgbActiveModal);
+
+  confirmFunction: () => void;
+    confirm() {
+      this.confirmFunction();
+      return this.activeModal.close();
     }
   
     cancel() {

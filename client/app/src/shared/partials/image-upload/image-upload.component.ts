@@ -1,14 +1,28 @@
 import {HttpClient} from "@angular/common/http";
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from "@angular/core";
-import {FlowDirective} from "@flowjs/ngx-flow";
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, inject} from "@angular/core";
+import {FlowDirective, NgxFlowModule} from "@flowjs/ngx-flow";
 import {Subscription} from "rxjs";
 import {AuthenticationService} from "@app/services/helper/authentication.service";
+import {FlowOptions} from "@flowjs/flow.js";
+import {UtilsService} from "@app/shared/services/utils.service";
+import {FormsModule} from "@angular/forms";
+import {NgOptimizedImage} from "@angular/common";
+import {TranslateModule} from "@ngx-translate/core";
+import {TranslatorPipe} from "@app/shared/pipes/translate";
+import {NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
-  selector: "src-image-upload",
-  templateUrl: "./image-upload.component.html"
+    selector: "src-image-upload",
+    templateUrl: "./image-upload.component.html",
+    standalone: true,
+    imports: [FormsModule, NgbTooltipModule, NgxFlowModule, NgOptimizedImage, TranslateModule, TranslatorPipe]
 })
 export class ImageUploadComponent implements AfterViewInit, OnDestroy, OnInit {
+  private http = inject(HttpClient);
+  protected authenticationService = inject(AuthenticationService);
+  private utilsService = inject(UtilsService);
+
   @ViewChild("flowAdvanced")
   flow: FlowDirective;
   @ViewChild("uploader") uploaderElementRef!: ElementRef<HTMLInputElement>;
@@ -20,12 +34,14 @@ export class ImageUploadComponent implements AfterViewInit, OnDestroy, OnInit {
   autoUploadSubscription: Subscription;
   filemodel: any;
   currentTImestamp = new Date().getTime();
-
-  constructor(private http: HttpClient, protected authenticationService: AuthenticationService) {
-  }
+  flowConfig: FlowOptions;
+  @ViewChild('uploader') uploaderInput: ElementRef<HTMLInputElement>;
 
   ngOnInit() {
     this.filemodel = this.imageUploadModel[this.imageUploadModelAttr];
+    this.flowConfig = this.utilsService.getFlowOptions();
+    this.flowConfig.target = "api/admin/files/"+this.imageUploadId;
+    this.flowConfig.singleFile = true;
   }
 
   ngAfterViewInit() {
@@ -71,6 +87,9 @@ export class ImageUploadComponent implements AfterViewInit, OnDestroy, OnInit {
         }
         this.imageUploadObj.files = [];
         this.filemodel = ""
+        if (this.uploaderInput) {
+          this.uploaderInput.nativeElement.value = "";
+        }
       });
   }
 

@@ -1,7 +1,7 @@
 # 
 # Translators:
 # code smite <codesmite@gmail.com>, 2021
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2021-2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2021-2022
 # Mahmud Numan <mahmudnuman@gmail.com>, 2017
 # Nafiur Rahman, 2020
 # Nafiur Rahman, 2020
@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2021-2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2021-2022\n"
 "Language-Team: Bengali (http://app.transifex.com/otf/globaleaks/language/bn/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -91,20 +91,17 @@ msgstr "প্রশাসকগণ ব্যবহারকারীর পা�
 msgid "Advanced"
 msgstr "অগ্রবর্তী"
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "প্রাপককে প্রতিবেদনগুলি মুছে ফেলার অনুমতি দিন"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "প্রাপককে রিপোর্টের মেয়াদ শেষ হওয়ার তারিখ স্থগিত করার অনুমতি দিন"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "হুইসেল ব্লোয়ারকে প্রতিবেদনে সংযুক্তি যুক্ত করতে দিন"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "হুইসেল ব্লোয়ারকে মন্তব্য লেখার অনুমতি দিন"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "ব্যবহারকারীদের সাইন আপ করার অনুমতি দিন"
@@ -196,8 +193,8 @@ msgstr "এগিয়ে যাওয়ার আগে, দয়া কর�
 msgid "Block the submission"
 msgstr "জমা দেওয়া অক্ষম করুন"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "নিশ্চিত করলে, আপনি মেয়াদ শেষ হওয়ার তারিখটি এখানে স্থগিত করবেন:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -269,9 +266,6 @@ msgstr "কনফিগার করুন"
 
 msgid "Confirm"
 msgstr "নিশ্চিত করা"
-
-msgid "Confirmation"
-msgstr "নিশ্চিতকরণ"
 
 msgid "Congratulations!"
 msgstr "অভিনন্দন!"
@@ -406,6 +400,9 @@ msgstr "নিকটতম নির্বাচনযোগ্য তারি�
 
 msgid "Edit"
 msgstr "এডিট "
+
+msgid "Edit the expiration date"
+msgstr "মেয়াদ উত্তীর্ণের তারিখ স্থগিত করুন"
 
 msgid "Email"
 msgstr "ইমেইল"
@@ -904,9 +901,6 @@ msgstr "দয়া করে মনে রাখবেন যে সম্প�
 
 msgid "Please select your account:"
 msgstr "আপনার অ্যাকাউন্টটি নির্বাচন করুন:"
-
-msgid "Postpone the expiration date"
-msgstr "মেয়াদ উত্তীর্ণের তারিখ স্থগিত করুন"
 
 msgid "Preferences"
 msgstr "পছন্দসমূহ"

@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 import {
   HttpInterceptor,
   HttpEvent,
@@ -28,12 +28,14 @@ const protectedUrls = [
 
 @Injectable()
 export class appInterceptor implements HttpInterceptor {
-  constructor(private authenticationService: AuthenticationService, private httpClient: HttpClient, private cryptoService: CryptoService, private translationService: TranslationService) {
-  }
+  private authenticationService = inject(AuthenticationService);
+  private httpClient = inject(HttpClient);
+  private cryptoService = inject(CryptoService);
 
   private getAcceptLanguageHeader(): string | null {
-    if (this.translationService.language) {
-      return this.translationService.language;
+    const language = sessionStorage.getItem("language");
+    if (language) {
+      return language;
     } else {
       const url = window.location.href;
       const hashFragment = url.split("#")[1];
@@ -85,9 +87,9 @@ export class appInterceptor implements HttpInterceptor {
 
 @Injectable()
 export class ErrorCatchingInterceptor implements HttpInterceptor {
+  private authenticationService = inject(AuthenticationService);
+  private appDataService = inject(AppDataService);
 
-  constructor(private authenticationService: AuthenticationService, private appDataService: AppDataService) {
-  }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -98,8 +100,8 @@ export class ErrorCatchingInterceptor implements HttpInterceptor {
             if (error.error["error_code"] === 10) {
               this.authenticationService.deleteSession();
               this.authenticationService.reset();
-              this.authenticationService.routeLogin();
-            } else if (error.error["error_code"] === 6 && this.authenticationService.isSessionActive()) {
+              this.authenticationService.loginRedirect();
+            } else if (error.error["error_code"] === 6 && this.authenticationService.session) {
               if (this.authenticationService.session.role !== "whistleblower") {
                 location.pathname = this.authenticationService.session.homepage;
               }
@@ -114,22 +116,24 @@ export class ErrorCatchingInterceptor implements HttpInterceptor {
 
 @Injectable()
 export class CompletedInterceptor implements HttpInterceptor {
+  private appDataService = inject(AppDataService);
+
   count = 0;
 
-  constructor(private appDataService: AppDataService) {
-  }
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url !== "api/auth/authentication") {
+    if (!req.url.includes("api/auth/")) {
       this.count++;
       this.appDataService.updateShowLoadingPanel(true);
     }
 
     return next.handle(req).pipe(
       finalize(() => {
-        if (req.url !== "api/auth/authentication") {
-          this.count--;
-          if (this.count === 0 && (req.url !== "api/auth/token")) {
+        if (!req.url.includes("api/auth/")) {
+          if (this.count > 0) {
+            this.count--;
+	  }
+
+          if (this.count === 0) {
             timer(100).pipe(
               switchMap(() => {
                 this.appDataService.updateShowLoadingPanel(false);

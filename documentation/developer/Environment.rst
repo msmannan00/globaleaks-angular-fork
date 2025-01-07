@@ -1,7 +1,7 @@
 =======================
-Development Environment
+Development environment
 =======================
-This guide describe how to set up an environment in order to contribute to the development of GlobaLeaks.
+This guide describes how to set up an environment in order to contribute to the development of GlobaLeaks.
 
 Requirements
 ============
@@ -28,7 +28,7 @@ The repository could be cloned with:
 
 .. code:: sh
 
-  git clone https://github.com/globaleaks/GlobaLeaks.git
+  git clone https://github.com/globaleaks/globaleaks-whistleblowing-software.git
 
 Client dependencies could be installed by issuing:
 
@@ -68,7 +68,7 @@ Setup the backend and its dependencies:
 .. code:: sh
 
   cd GlobaLeaks/backend
-  python3 -mvenv env
+  python3 -m venv env
   source env/bin/activate
   pip3 install -r requirements.txt
 
@@ -83,3 +83,25 @@ To run globaleaks from sources within the development environment you should iss
   bin/globaleaks -z -n
 
 GlobaLeaks will start and be reachable at the following address https://127.0.0.1:8443
+
+Building the docs
+=================
+To build the documentation:
+
+.. code:: sh
+
+  cd GlobaLeaks/documentation
+  pip install -r requirements.txt
+  make html
+
+To edit the docs with hot-reload functionality:
+
+.. code:: sh
+
+  cd GlobaLeaks/documentation
+  python3 -m venv env
+  source env/bin/activate
+  pip install -r requirements.txt
+  make dev
+
+Sphinx server will start and be reachable at the following address http://127.0.0.1:8000 in the web browser.

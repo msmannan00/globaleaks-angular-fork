@@ -1,18 +1,23 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, inject} from "@angular/core";
 import {Receiver} from "@app/models/app/public-model";
 import {SubmissionService} from "@app/services/helper/submission.service";
 import {TranslateService} from "@ngx-translate/core";
+import {NgClass, NgOptimizedImage} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {MarkdownComponent} from "ngx-markdown";
+import {StripHtmlPipe} from "@app/shared/pipes/strip-html.pipe";
 
 @Component({
-  selector: "src-receiver-card",
-  templateUrl: "./receiver-card.component.html"
+    selector: "src-receiver-card",
+    templateUrl: "./receiver-card.component.html",
+    standalone: true,
+    imports: [FormsModule, MarkdownComponent, NgClass, NgOptimizedImage, StripHtmlPipe]
 })
 export class ReceiverCardComponent {
+  protected translate = inject(TranslateService);
+
   @Input() submission: SubmissionService;
   @Input() receiverModel: Receiver;
-
-  constructor(protected translate: TranslateService) {
-  }
 
   selectable(): boolean {
     if (this.submission.context.maximum_selectable_receivers === 0) {

@@ -1,47 +1,42 @@
 {
-  "root": true,
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
-  "env": {
-    "node": true
-  },
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
-  ],
-  "rules": {
-    "@typescript-eslint/no-explicit-any": "off",
-    "no-multiple-empty-lines": "error",
-    "@typescript-eslint/array-type": "error",
-    "comma-dangle": 0,
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      {
-        "args": "after-used",
-        "argsIgnorePattern": "_"
-      }
-    ],
-    "eqeqeq": "error",
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "double"
-    ],
-    "indent": ["error", 2],
-    "semi": [
-      "error",
-      "always"
-    ]
-  },
-  "overrides": [
-    {
-      "files": "*.json",
-      "parser": "jsonc-eslint-parser",
-      "rules": {}
+    "env": {
+        "browser": true,
+	"commonjs": true,
+        "jasmine": true,
+	"node": true,
+        "protractor": true,
+        "serviceworker": true
+    },
+    "extends": "eslint:recommended",
+    "globals": {
+        "angular": true,
+	"anonymizeSpeaker": true,
+        "console": true,
+        "Flow": true,
+        "GL": true,
+        "onmessage": true,
+        "saveAs": true,
+        "Uint8Array": true,
+        "Uint16Array": true,
+        "Uint32Array": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 9
+    },
+    "rules": {
+        "comma-dangle": 0,
+        "eqeqeq": "error",
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
     }
-  ]
 }

@@ -16,6 +16,7 @@ from globaleaks.handlers.user import user_serialize_user
 from globaleaks.jobs.job import DailyJob
 from globaleaks.orm import db_del, db_log, transact, tw
 from globaleaks.utils.fs import srm
+from globaleaks.utils.log import log
 from globaleaks.utils.templating import Templating
 from globaleaks.utils.utility import datetime_never, datetime_now, is_expired
 
@@ -65,11 +66,20 @@ class Cleaning(DailyJob):
             data = {
                 'type': 'tip_expiration_summary',
                 'node': db_admin_serialize_node(session, tid, user.language),
-                'notification': db_get_notification(session, tid, user.language),
                 'user': user_desc,
                 'expiring_submission_count': expiring_submission_count,
                 'earliest_expiration_date': earliest_expiration_date
             }
+
+            # Do not generate emails if the receiver has disabled notifications
+            if not data['user']['notification']:
+                 log.debug("Discarding emails for %s due to receiver's preference.", user.id)
+                 return
+
+            if data['node']['mode'] == 'default':
+                data['notification'] = db_get_notification(session, tid, user.language)
+            else:
+                data['notification'] = db_get_notification(session, 1, user.language)
 
             subject, body = Templating().get_mail_subject_and_body(data)
 

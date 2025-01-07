@@ -1,7 +1,7 @@
 class WhistleblowerPage {
-  public static performSubmission() {
+  public static performSubmission(arg?:string) {
     cy.visit("#/");
-    cy.takeScreenshot("whistleblower/home", 0);
+    cy.takeScreenshot("whistleblower/home");
 
     cy.get("#WhistleblowingButton").click();
     cy.get("#step-0").should("be.visible");
@@ -17,25 +17,40 @@ class WhistleblowerPage {
 
     cy.get("#step-0-field-6-0-input-0").type("...");
 
-    cy.get("#step-0-field-5-0-input-0 input[type='file']").selectFile({
-      contents: "./cypress/fixtures/files/evidence-1.pdf",
-      fileName: "evidence-1.pdf",
-      mimeType: "application/pdf"
-    }, {"force": true});
-
-    cy.get("#step-0-field-5-0-input-0 input[type='file']").selectFile({
-      contents: "./cypress/fixtures/files/evidence-2.zip",
-      fileName: "evidence-2.zip",
-      mimeType: "application/zip"
-    }, {"force": true});
+    if(arg && arg =="single_file_upload"){
+      cy.get("#step-0-field-5-0-input-0 input[type='file']").selectFile({
+        contents: "./cypress/fixtures/files/test.pdf",
+        fileName: "test.pdf",
+        mimeType: "application/pdf"
+      }, {"force": true});
+      
+    } else {
+      cy.get("#step-0-field-5-0-input-0 input[type='file']").selectFile({
+        contents: "./cypress/fixtures/files/test.pdf",
+        fileName: "test.pdf",
+        mimeType: "application/pdf"
+      }, {"force": true});
+  
+      cy.get("#step-0-field-5-0-input-0 input[type='file']").selectFile({
+        contents: "./cypress/fixtures/files/test.zip",
+        fileName: "test.zip",
+        mimeType: "application/zip"
+      }, {"force": true});
+    }
 
     cy.get("#step-0-field-7-0-input-0").first().select(2);
 
     cy.get("#step-0-field-10-0-input-0").type("...");
-    cy.wait(1000);
+
     cy.get("#SubmitButton").should("be.visible");
 
+    cy.takeScreenshot("whistleblower/submission");
+
     cy.get("#SubmitButton").click();
+
+    cy.get("#ReceiptCode").should("be.visible");
+
+    cy.takeScreenshot("whistleblower/receipt");
 
     return cy.get('#ReceiptCode').invoke('val').then((value) => {
       return value;

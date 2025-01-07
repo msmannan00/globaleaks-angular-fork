@@ -1,6 +1,6 @@
-import {Component, HostListener, OnInit} from "@angular/core";
+import {Component, HostListener, OnInit, inject} from "@angular/core";
 import {AppConfigService} from "@app/services/root/app-config.service";
-import {NgbDate, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {NgbDate, NgbModal, NgbPagination, NgbPaginationPrevious, NgbPaginationNext, NgbPaginationFirst, NgbPaginationLast, NgbTooltipModule} from "@ng-bootstrap/ng-bootstrap";
 import {AppDataService} from "@app/app-data.service";
 import {GrantAccessComponent} from "@app/shared/modals/grant-access/grant-access.component";
 import {RevokeAccessComponent} from "@app/shared/modals/revoke-access/revoke-access.component";
@@ -8,23 +8,42 @@ import {PreferenceResolver} from "@app/shared/resolvers/preference.resolver";
 import {RTipsResolver} from "@app/shared/resolvers/r-tips-resolver.service";
 import {UtilsService} from "@app/shared/services/utils.service";
 import {TranslateService} from "@ngx-translate/core";
-import {IDropdownSettings} from "ng-multiselect-dropdown";
-import {filter, orderBy} from "lodash";
+import {IDropdownSettings, NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
+import {filter, orderBy} from "lodash-es";
 import {TokenResource} from "@app/shared/services/token-resource.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {rtipResolverModel} from "@app/models/resolvers/rtips-resolver-model";
-import {Receiver} from "@app/models/reciever/reciever-tip-data";
+import {Receiver} from "@app/models/receiver/receiver-tip-data";
 import {AuthenticationService} from "@app/services/helper/authentication.service";
 import {HttpService} from "@app/shared/services/http.service";
 import {Observable, from, switchMap} from "rxjs";
 import {HttpClient, HttpResponse} from "@angular/common/http";
-import {formatDate} from "@angular/common";
+import {formatDate, NgClass, SlicePipe, DatePipe} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {DateRangeSelectorComponent} from "@app/shared/components/date-selector/date-selector.component";
+import {TranslatorPipe} from "@app/shared/pipes/translate";
+import {OrderByPipe} from "@app/shared/pipes/order-by.pipe";
 
 @Component({
-  selector: "src-tips",
-  templateUrl: "./tips.component.html"
+    selector: "src-tips",
+    templateUrl: "./tips.component.html",
+    standalone: true,
+    imports: [RouterLink, FormsModule, NgClass, NgMultiSelectDropDownModule, DateRangeSelectorComponent, NgbPagination, NgbPaginationPrevious, NgbPaginationNext, NgbPaginationFirst, NgbPaginationLast, NgbTooltipModule, SlicePipe, DatePipe, TranslatorPipe, OrderByPipe]
 })
 export class TipsComponent implements OnInit {
+  private http = inject(HttpClient);
+  protected authenticationService = inject(AuthenticationService);
+  protected httpService = inject(HttpService);
+  private appConfigServices = inject(AppConfigService);
+  private router = inject(Router);
+  protected RTips = inject(RTipsResolver);
+  protected preference = inject(PreferenceResolver);
+  private modalService = inject(NgbModal);
+  protected utils = inject(UtilsService);
+  protected appDataService = inject(AppDataService);
+  private translateService = inject(TranslateService);
+  private tokenResourceService = inject(TokenResource);
+
   search: string | undefined;
   selectedTips: string[] = [];
   filteredTips: rtipResolverModel[];
@@ -57,12 +76,10 @@ export class TipsComponent implements OnInit {
     textField: "label",
     itemsShowLimit: 5,
     allowSearchFilter: true,
+    selectAllText: this.translateService.instant("Select all"),
+    unSelectAllText: this.translateService.instant("Deselect all"),
     searchPlaceholderText: this.translateService.instant("Search")
   };
-
-  constructor(private http: HttpClient,protected authenticationService: AuthenticationService, protected httpService: HttpService, private appConfigServices: AppConfigService, private router: Router, protected RTips: RTipsResolver, protected preference: PreferenceResolver, private modalService: NgbModal, protected utils: UtilsService, protected appDataService: AppDataService, private translateService: TranslateService, private tokenResourceService: TokenResource) {
-
-  }
 
   ngOnInit() {
     if (!this.RTips.dataModel) {
@@ -89,14 +106,15 @@ export class TipsComponent implements OnInit {
   openGrantAccessModal(): void {
     this.utils.runUserOperation("get_users_names", {}, false).subscribe({
       next: response => {
+        const names = response as Record<string, string>;
         const selectableRecipients: Receiver[] = [];
         this.appDataService.public.receivers.forEach(async (receiver: Receiver) => {
           if (receiver.id !== this.authenticationService.session.user_id) {
+            receiver.name = names[receiver.id];
             selectableRecipients.push(receiver);
           }
         });
         const modalRef = this.modalService.open(GrantAccessComponent, {backdrop: 'static', keyboard: false});
-        modalRef.componentInstance.usersNames = response;
         modalRef.componentInstance.selectableRecipients = selectableRecipients;
         modalRef.componentInstance.confirmFun = (receiver_id: Receiver) => {
           const req = {
@@ -115,18 +133,20 @@ export class TipsComponent implements OnInit {
       }
     });
   }
+
   openRevokeAccessModal() {
     this.utils.runUserOperation("get_users_names", {}, false).subscribe(
       {
         next: response => {
+          const names = response as Record<string, string>;
           const selectableRecipients: Receiver[] = [];
           this.appDataService.public.receivers.forEach(async (receiver: Receiver) => {
             if (receiver.id !== this.authenticationService.session.user_id) {
+              receiver.name = names[receiver.id];
               selectableRecipients.push(receiver);
             }
           });
           const modalRef = this.modalService.open(RevokeAccessComponent, {backdrop: 'static', keyboard: false});
-          modalRef.componentInstance.usersNames = response;
           modalRef.componentInstance.selectableRecipients = selectableRecipients;
           modalRef.componentInstance.confirmFun = (receiver_id: Receiver) => {
             const req = {
@@ -147,11 +167,7 @@ export class TipsComponent implements OnInit {
     );
   }
 
-  tipsExport() {
-    this.exportFiles().subscribe();
-  }
-
-  exportFiles(): Observable<void> {
+  exportTips() {
     const selectedTips = this.selectedTips.slice();
 
     return from(this.tokenResourceService.getWithProofOfWork()).pipe(
@@ -179,7 +195,7 @@ export class TipsComponent implements OnInit {
           this.appDataService.updateShowLoadingPanel(false);
         });
       })
-    );
+    ).subscribe();
   }
 
   reload() {
@@ -203,23 +219,11 @@ export class TipsComponent implements OnInit {
     return this.selectedTips.indexOf(id) !== -1;
   }
 
-  exportTip(tipId: string) {
-    this.utils.download("api/recipient/rtips/" + tipId + "/export").subscribe();
-    this.appDataService.updateShowLoadingPanel(false);
-  }
-
-  markReportStatus(date: string): boolean {
-    const report_date = new Date(date);
-    const current_date = new Date();
-    return current_date > report_date;
-  }
-
   actAsWhistleblower() {
     this.http.get('/api/auth/operatorauthswitch', { observe: 'response' }).subscribe(
       (response: HttpResponse<any>) => {
         if (response.status === 200) {
-          const urlRedirect = window.location.origin + response.body.redirect;
-          window.open(urlRedirect, '_blank');
+          window.open(window.location.origin + response.body.redirect);
         }
       },
     );
@@ -313,20 +317,17 @@ export class TipsComponent implements OnInit {
     this.expirationDatePicker = false;
   }
 
-  onSearchChange(value: string | number | undefined) {
-    if (typeof value !== "undefined") {
+  onSearchChange(search: string | number | undefined) {
+    search = String(search);
+
+    if (typeof search !== "undefined") {
       this.currentPage = 1;
       this.filteredTips = this.RTips.dataModel;
       this.processTips();
 
-      this.filteredTips = orderBy(filter(this.filteredTips, (tip) =>
-        Object.values(tip).some((val) => {
-          if (typeof val === "string" || typeof val === "number") {
-            return String(val).toLowerCase().includes(String(value).toLowerCase());
-          }
-          return false;
-        })
-      ), "update_date");
+      this.filteredTips = orderBy(filter(this.filteredTips, (tip) => {
+        return this.utils.searchInObject(tip, search);
+      }), "update_date");
     }
   }
 
@@ -383,8 +384,8 @@ export class TipsComponent implements OnInit {
   @HostListener("document:click", ["$event"])
   onClick(event: MouseEvent) {
     const clickedElement = event.target as HTMLElement;
-    const isContainerClicked = clickedElement.classList.contains("ngb-dtepicker-container") || clickedElement.classList.contains("dropdown-multi-select-container") ||
-      clickedElement.closest(".ngb-dtepicker-container") !== null || clickedElement.closest(".dropdown-multi-select-container") !== null;
+    const isContainerClicked = clickedElement.classList.contains("ngb-datepicker-container") || clickedElement.classList.contains("dropdown-multi-select-container") ||
+      clickedElement.closest(".ngb-datepicker-container") !== null || clickedElement.closest(".dropdown-multi-select-container") !== null;
     if (!isContainerClicked) {
       this.closeAllDatePickers();
     }
@@ -401,6 +402,7 @@ export class TipsComponent implements OnInit {
     this.lastUpdatePicker = false;
     this.expirationDatePicker = false;
   }
+
   exportToCsv(): void {
     this.utils.generateCSV(JSON.stringify(this.getDataCsv()), 'reports',this.getDataCsvHeaders());
   }
@@ -411,7 +413,7 @@ export class TipsComponent implements OnInit {
       id: tip.id,
       progressive: tip.progressive,
       important: tip.important,
-      reportStatus: this.markReportStatus(tip.reminder_date),
+      reportStatus: this.utils.isDatePassed(tip.reminder_date),
       context_name: tip.context_name,
       label: tip.label,
       status: tip.submissionStatusStr,
@@ -443,6 +445,6 @@ export class TipsComponent implements OnInit {
       'Number of Files',
       'Subscription',
       'Number of Recipients'
-    ].map(header => this.translateService.instant(header));
+    ].map(header => header ? this.translateService.instant(header) : '');
   }
 }

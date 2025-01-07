@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable, inject} from "@angular/core";
 import {Router} from "@angular/router";
 import {Observable, of} from "rxjs";
 import {HttpService} from "@app/shared/services/http.service";
@@ -10,13 +10,14 @@ import {map} from "rxjs/operators";
   providedIn: "root"
 })
 export class PreferenceResolver {
+  private router = inject(Router);
+  private httpService = inject(HttpService);
+  private authenticationService = inject(AuthenticationService);
+
   dataModel: preferenceResolverModel = new preferenceResolverModel();
 
-  constructor(private router: Router, private httpService: HttpService, private authenticationService: AuthenticationService) {
-  }
-
   resolve(): Observable<boolean> {
-    if (this.authenticationService.isSessionActive()) {
+    if (this.authenticationService.session) {
       return this.httpService.requestUserPreferenceResource().pipe(
         map((response: preferenceResolverModel) => {
           this.dataModel = response;

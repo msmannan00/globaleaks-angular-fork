@@ -1,7 +1,7 @@
 # 
 # Translators:
 # Francisco Huerta <francisco.huerta@davinci-ti.es>, 2019
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2020,2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2020,2022
 # Maria del Mar Cibreiro Cordero <mcibreiro@ccontasgalicia.es>, 2019
 # Oscar Guardiola <Oscar.Guardiola@davinci-ti.es>, 2019
 # Oscar Guardiola <Oscar.Guardiola@davinci-ti.es>, 2019
@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2020,2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2020,2022\n"
 "Language-Team: Galician (http://app.transifex.com/otf/globaleaks/language/gl/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -88,10 +88,10 @@ msgstr ""
 msgid "Advanced"
 msgstr "Avanzados"
 
-msgid "Allow the recipient to delete reports"
+msgid "Allow the recipient to edit the reports' expiration date"
 msgstr ""
 
-msgid "Allow the recipient to postpone the report expiration date"
+msgid "Allow the recipient to delete reports"
 msgstr ""
 
 msgid "Allow the whistleblower to add attachments"
@@ -99,9 +99,6 @@ msgstr "Permitir que o denunciante engada anexos ao envío"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "Permitir ao denunciante escribir comentarios"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "Permitir aos usuarios rexistrarse"
@@ -193,8 +190,8 @@ msgstr "Antes de continuar, estableza un novo contrasinal."
 msgid "Block the submission"
 msgstr ""
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "Ao confirmar, adiarás a data de caducidade a:"
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -266,9 +263,6 @@ msgstr "Configurar"
 
 msgid "Confirm"
 msgstr "Confirmar"
-
-msgid "Confirmation"
-msgstr ""
 
 msgid "Congratulations!"
 msgstr "Parabéns!"
@@ -403,6 +397,9 @@ msgstr "Data máis inmediata seleccionable"
 
 msgid "Edit"
 msgstr "Editar"
+
+msgid "Edit the expiration date"
+msgstr "Pospoñer a data de caducidade"
 
 msgid "Email"
 msgstr "Enderezo electrónico"
@@ -901,9 +898,6 @@ msgstr ""
 
 msgid "Please select your account:"
 msgstr "Selecciona a túa conta:"
-
-msgid "Postpone the expiration date"
-msgstr "Pospoñer a data de caducidade"
 
 msgid "Preferences"
 msgstr "Preferencias"

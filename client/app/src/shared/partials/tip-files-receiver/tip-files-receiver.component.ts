@@ -1,61 +1,48 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input, OnInit, inject} from "@angular/core";
 import {UtilsService} from "@app/shared/services/utils.service";
 import {AppDataService} from "@app/app-data.service";
 import {AuthenticationService} from "@app/services/helper/authentication.service";
 import {HttpService} from "@app/shared/services/http.service";
-import {CryptoService} from "@app/shared/services/crypto.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {FileViewComponent} from "@app/shared/modals/file-view/file-view.component";
 import {ReceiverTipService} from "@app/services/helper/receiver-tip.service";
 import {WbFile} from "@app/models/app/shared-public-model";
 import {PreferenceResolver} from "@app/shared/resolvers/preference.resolver";
 import {MaskService} from "@app/shared/services/mask.service";
 import {RedactionData} from "@app/models/component-model/redaction";
+import {NgClass, DatePipe} from "@angular/common";
+import {TranslateModule} from "@ngx-translate/core";
+import {TranslatorPipe} from "@app/shared/pipes/translate";
+import {ByteFmtPipe} from "@app/shared/pipes/byte-fmt.pipe";
+import {OrderByPipe} from "@app/shared/pipes/order-by.pipe";
+import {NgbTooltipModule} from "@ng-bootstrap/ng-bootstrap";
+
+
 @Component({
-  selector: "src-tip-files-receiver",
-  templateUrl: "./tip-files-receiver.component.html"
+    selector: "src-tip-files-receiver",
+    templateUrl: "./tip-files-receiver.component.html",
+    standalone: true,
+    imports: [NgClass, DatePipe, TranslateModule, TranslatorPipe, ByteFmtPipe, OrderByPipe, NgbTooltipModule]
 })
 export class TipFilesReceiverComponent implements OnInit {
+  protected maskService = inject(MaskService);
+  protected preferenceResolver = inject(PreferenceResolver);
+  protected modalService = inject(NgbModal);
+  protected httpService = inject(HttpService);
+  protected authenticationService = inject(AuthenticationService);
+  protected utilsService = inject(UtilsService);
+  protected tipService = inject(ReceiverTipService);
+  protected appDataService = inject(AppDataService);
+
   @Input() fileUploadUrl: string;
   @Input() redactMode: boolean;
 
-  supportedViewTypes = ["application/pdf", "audio/mpeg", "image/gif", "image/jpeg", "image/png", "text/csv", "text/plain", "video/mp4"];
   collapsed = false;
-
-  constructor(protected maskService:MaskService,protected preferenceResolver:PreferenceResolver,protected modalService: NgbModal, private cryptoService: CryptoService, protected httpService: HttpService, protected authenticationService: AuthenticationService, protected utilsService: UtilsService, protected tipService: ReceiverTipService, protected appDataService: AppDataService) {
-  }
 
   ngOnInit(): void {
   }
 
-  public viewRFile(file: WbFile) {
-    const modalRef = this.modalService.open(FileViewComponent, {backdrop: 'static', keyboard: false});
-    modalRef.componentInstance.args = {
-      file: file,
-      loaded: false,
-      iframeHeight: window.innerHeight * 0.75
-    };
-  }
-
   getSortedWBFiles(data: WbFile[]): WbFile[] {
     return data;
-  }
-
-  public downloadRFile(file: WbFile) {
-    const param = JSON.stringify({});
-    this.httpService.requestToken(param).subscribe
-    (
-      {
-        next: async token => {
-          this.cryptoService.proofOfWork(token.id).subscribe(
-              (ans) => {
-                window.open("api/recipient/wbfiles/" + file.id + "?token=" + token.id + ":" + ans);
-                this.appDataService.updateShowLoadingPanel(false);
-              }
-          );
-        }
-      }
-    );
   }
 
   redactFileOperation(operation: string, content_type: string, file: any) {

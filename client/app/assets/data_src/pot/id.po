@@ -12,7 +12,7 @@
 # Edo Imantaka, 2021
 # Evanna Audrey <evanna.n.audrey@gmail.com>, 2021
 # Fransisca Susanti <susanti@jaring.id>, 2018
-# Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2017-2018,2020-2022
+# Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2017-2018,2020-2022
 # Helen Zhang <helen13zhang@gmail.com>, 2018
 # Ibnu Daru Aji, 2015
 # Ibnu Daru Aji, 2015
@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GlobaLeaks\n"
 "PO-Revision-Date: 2013-05-29 17:59+0000\n"
-"Last-Translator: Giovanni Pellerano <giovanni.pellerano@evilaliv3.org>, 2017-2018,2020-2022\n"
+"Last-Translator: Giovanni Pellerano <giovanni.pellerano@globaleaks.org>, 2017-2018,2020-2022\n"
 "Language-Team: Indonesian (http://app.transifex.com/otf/globaleaks/language/id/)\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -109,20 +109,17 @@ msgstr "Administrator mengizinkan untuk mengganti kata sandi pengguna:"
 msgid "Advanced"
 msgstr "Mahir"
 
+msgid "Allow the recipient to edit the reports' expiration date"
+msgstr ""
+
 msgid "Allow the recipient to delete reports"
 msgstr "Izinkan penerima untuk menghapus laporan"
-
-msgid "Allow the recipient to postpone the report expiration date"
-msgstr "Izinkan penerima untuk menunda tanggal kedaluwarsa laporan"
 
 msgid "Allow the whistleblower to add attachments"
 msgstr "Izinkan informan publik untuk menambahkan lampiran ke dalam laporan"
 
 msgid "Allow the whistleblower to write comments"
 msgstr "Izinkan informan publik untuk menulis komentar"
-
-msgid "Allow this user to reopen management of a report"
-msgstr ""
 
 msgid "Allow users to sign up"
 msgstr "Izinkan pengguna untuk mendaftar"
@@ -146,7 +143,7 @@ msgid "Anomaly detection thresholds"
 msgstr "Batas deteksi anomali "
 
 msgid "Anonymity"
-msgstr ""
+msgstr "Anonimitas"
 
 msgid "Anonymize outgoing connections"
 msgstr "Menganonimisasi koneksi keluar"
@@ -214,8 +211,8 @@ msgstr "Sebelum melanjutkan, mohon atur kata sandi baru."
 msgid "Block the submission"
 msgstr "Blokir kiriman"
 
-msgid "By confirming, you will postpone the expiration date to:"
-msgstr "Dengan mengkonfirmasi, anda akan menunda tanggal kedaluwarsa menjadi: "
+msgid "By confirming, you will edit the expiration date to:"
+msgstr ""
 
 msgid "By confirming, you will set a reminder on date:"
 msgstr ""
@@ -286,9 +283,6 @@ msgid "Configure"
 msgstr "Konfigurasikan"
 
 msgid "Confirm"
-msgstr "Konfirmasi"
-
-msgid "Confirmation"
 msgstr "Konfirmasi"
 
 msgid "Congratulations!"
@@ -424,6 +418,9 @@ msgstr "Tanggal paling awal yang dapat dipilih"
 
 msgid "Edit"
 msgstr "Sunting"
+
+msgid "Edit the expiration date"
+msgstr "Menunda tanggal kedaluwarsa"
 
 msgid "Email"
 msgstr "Surel"
@@ -922,9 +919,6 @@ msgstr "Harap dicatat bahwa semua data yang terkait akan dihapus secara permanen
 
 msgid "Please select your account:"
 msgstr "Tolong pilih akun Anda"
-
-msgid "Postpone the expiration date"
-msgstr "Menunda tanggal kedaluwarsa"
 
 msgid "Preferences"
 msgstr "Preferensi"
