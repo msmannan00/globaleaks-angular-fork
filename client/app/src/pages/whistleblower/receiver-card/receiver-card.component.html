@@ -16,7 +16,7 @@
   </div>
   <div class="row">
     @if (receiverModel.description) {
-      <div class="col-md-12 description">{{receiverModel.description}}</div>
+      <markdown class="col-md-12" [data]="receiverModel.description | stripHtml"></markdown>
     }
   </div>
 </div>

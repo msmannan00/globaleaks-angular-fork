@@ -401,7 +401,7 @@ def serialize_field(session, tid, field, language, data=None, serialize_template
         children.sort(key=lambda f: (f['y'], f['x']))
 
     # Enable voice features if questions of type voice are enabled
-    if tid in State.tenants and field.type == 'voice':
+    if tid in State.tenants and f_to_serialize.type == 'voice':
         State.tenants[tid].microphone = True
 
     ret = {

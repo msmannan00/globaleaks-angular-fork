@@ -50,8 +50,6 @@ module.exports = function(grunt) {
           {dest: "build/js", cwd: "tmp/js", src: ["**"], expand: true},
           {dest: "build/data", cwd: "tmp/assets/data", src: ["**"], expand: true},
           {dest: "build/viewer/", cwd: ".", src: ["app/viewer/*"], expand: true, flatten: true},
-          {dest: "build/viewer/", cwd: "./node_modules/", src: ["pdfjs-dist/legacy/build/pdf.min.js"], expand: true, flatten: true },
-          {dest: "build/viewer/", cwd: "./node_modules/", src: ["pdfjs-dist/legacy/build/pdf.worker.min.js"], expand: true, flatten: true },
           {dest: "build/index.html", cwd: ".", src: ["tmp/index.html"], expand: false, flatten: true},
           {dest: "build/license.txt", cwd: ".", src: ["../LICENSE"], expand: false, flatten: true},
         ]
@@ -180,6 +178,22 @@ module.exports = function(grunt) {
         src: 'tmp/css/styles.css',
         dest: 'tmp/css/styles.css'
       },
+    },
+
+    webpack: {
+      build: {
+        entry: {
+          'pdf.min': './node_modules/pdfjs-dist/legacy/build/pdf.min.mjs',
+          'pdf.worker.min': './node_modules/pdfjs-dist/legacy/build/pdf.worker.min.mjs',
+        },
+        output: {
+          filename: '[name].js',
+          path: path.resolve('app/viewer/'),
+          libraryTarget: 'umd',
+          globalObject: 'this', // This makes the bundle work in both browser and Node.js
+        },
+        mode: 'production',
+      }
     },
 
     shell: {
@@ -805,8 +819,8 @@ module.exports = function(grunt) {
   // Run this task to fetch translations from transifex and create application files
   grunt.registerTask("updateTranslations", ["fetchTranslations", "makeAppData", "verifyAppData"]);
 
-  grunt.registerTask("build", ["clean", "shell:npx_build", "copy:build", "string-replace", "postcss", "copy:package", "clean:tmp"]);
+  grunt.registerTask("build", ["clean", "shell:npx_build", "copy:build", "webpack", "string-replace", "postcss", "copy:package", "clean:tmp"]);
  
-  grunt.registerTask("build_and_instrument", ["clean", "shell:npx_build_and_instrument", "copy:build", "string-replace", "postcss", "copy:package", "clean:tmp"]);
+  grunt.registerTask("build_and_instrument", ["clean", "shell:npx_build_and_instrument", "copy:build", "webpack", "string-replace", "postcss", "copy:package", "clean:tmp"]);
 };
 

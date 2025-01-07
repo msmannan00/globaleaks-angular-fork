@@ -23,7 +23,7 @@
         }
         @if (context.description) {
           <div class="row">
-            <div class="col-md-12 description">{{context.description}}</div>
+            <markdown class="col-md-12" [data]="context.description | stripHtml"></markdown>
           </div>
         }
       </div>

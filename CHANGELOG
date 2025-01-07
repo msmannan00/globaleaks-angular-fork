@@ -1,3 +1,18 @@
+Changes in version 5.0.41
+    Re-add markdown support to recipients and context descriptions (#4364)
+    Bump client dependencies to latest version
+
+Changes in version 5.0.40
+    Fix visualization of enforced recipients broken in 5.0.0
+
+Changes in version 5.0.39
+    Ensure voice questions could work when defined in question templates
+    Bump pdfjs again to v4 with proper packaging
+    Bump client dependencies to latest version
+
+Changes in version 5.0.38
+    Correct PDF viewer re-including pdfjs v3
+
 Changes in version 5.0.37
     Fix visualization of uploaded configuration files
     Revise detection and messaging about unsupported browsers
