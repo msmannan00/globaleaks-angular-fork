@@ -1,4 +1,6 @@
 # -*- coding: UTF-8 -*-
+from globaleaks.handlers.admin.user import db_create_user_profile
+from globaleaks.db import create_default_user_profiles
 from globaleaks import models
 from globaleaks.db.migrations.update import MigrationBase
 from globaleaks.models import Model
@@ -19,6 +21,53 @@ class Tenant_v_68(Model):
 
 class MigrationScript(MigrationBase):
     default_tenant_keys = ["subdomain", "onionservice", "https_admin", "https_analyst", "https_cert" ,"wizard_done", "uuid", "mode", "default_language", "name"]
+  
+    def migrate_User(self):
+        old_configs = self.session_old.query(self.model_from['User']).all()
+        valid_profile_attrs = {attr for attr in dir(self.model_to['UserProfile']) if not attr.startswith('_')}
+        roles = ['admin', 'receiver', 'analyst', 'custodian']
+        create_default_user_profiles(self.session_new, roles)
+        new_configs = []
+    
+        for old_obj in old_configs:
+            user_desc = {}
+            for attr in [
+                "name",
+                "role",
+                "enabled",
+                "notification",
+                "forcefully_selected",
+                "can_delete_submission",
+                "can_postpone_expiration",
+                "can_grant_access_to_reports",
+                "can_transfer_access_to_reports",
+                "can_redact_information",
+                "can_mask_information",
+                "can_reopen_reports",
+                "can_edit_general_settings",
+                "language",
+            ]:
+                if hasattr(old_obj, attr):
+                    user_desc[attr] = getattr(old_obj, attr)
+    
+            user_desc = {key: value for key, value in user_desc.items() if key in valid_profile_attrs}
+            existing_profile = (self.session_new.query(self.model_to['UserProfile']).filter_by(name=user_desc.get("name")).first())
+    
+            if existing_profile:
+                profile_id = existing_profile.id
+            else:
+                new_profile = db_create_user_profile(self.session_new, user_desc)
+                profile_id = new_profile['id'] if new_profile else None
+    
+            if profile_id:
+                new_obj = self.model_to['User']()
+                for key in new_obj.__mapper__.column_attrs.keys():
+                    if hasattr(old_obj, key):
+                        setattr(new_obj, key, getattr(old_obj, key))
+                new_obj.profile_id = profile_id
+                new_configs.append(new_obj)
+    
+        self.session_new.bulk_save_objects(new_configs)
 
     def migrate_Tenant(self):
 
